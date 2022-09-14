@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:intl/intl.dart';
+import 'package:loading_indicator/loading_indicator.dart';
 import 'package:logger/logger.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:sliding_sheet/sliding_sheet.dart';
@@ -526,7 +527,12 @@ class _RecPageState extends State<RecPage>
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(15),
             ),
-            title: const Text('Are you sure you want to delete this audio?'),
+            title: const Text(
+              'Are you sure you want to delete this audio?',
+              style: TextStyle(
+                fontFamily: 'Raleway',
+              ),
+            ),
             actions: [
               Padding(
                 padding: const EdgeInsets.only(right: 10.0),
@@ -634,10 +640,27 @@ class _RecPageState extends State<RecPage>
                   style: Theme.of(context).textTheme.subtitle1,
                 ),
               ),
+              const Spacer(),
               Container(
-                height: 170,
-                color: const Color(0xFFEAEAEA),
-              ),
+                  child: _mRecorder!.isRecording
+                      ? const Padding(
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 150, vertical: 70),
+                          child: SizedBox(
+                            child: LoadingIndicator(
+                              indicatorType: Indicator.lineScalePulseOutRapid,
+                              colors: [
+                                Colors.red,
+                                Color(0xFF2f2554),
+                                Color(0xFFD1C4E9),
+                              ],
+                            ),
+                          ),
+                        )
+                      : Container(
+                          height: 170,
+                          color: const Color(0xFFf2f2f2),
+                        )),
               const Spacer(),
               Padding(
                 padding: const EdgeInsets.only(
