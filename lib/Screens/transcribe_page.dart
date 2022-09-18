@@ -7,6 +7,7 @@ import 'package:loading_indicator/loading_indicator.dart';
 import 'dart:io';
 import 'dart:async';
 import 'package:iconsax/iconsax.dart';
+import 'package:file_picker/file_picker.dart';
 
 class Transcriber extends StatelessWidget {
   // This widget is the root of your application.
@@ -40,6 +41,7 @@ class _TranscribePageState extends State<TranscribePage> {
   // ignore: non_constant_identifier_names
   bool is_Transcribing = false;
   String content = '';
+  File? file;
 
   void transcribe() async {
     setState(() {
@@ -70,10 +72,17 @@ class _TranscribePageState extends State<TranscribePage> {
     });
   }
 
-  Future<List<int>> _getAudioContent(String name) async {
+  Future _getAudioContent(String name) async {
     //final directory = await getApplicationDocumentsDirectory();
     //final path = directory.path + '/$name';
-    final path = '/sdcard/Download/temp.wav';
+    final result = await FilePicker.platform.pickFiles(
+      allowMultiple: false,
+      type: FileType.custom,
+      allowedExtensions: ['wav'],
+    );
+    if (result == null) return;
+    final path = result.files.single.path!;
+    setState(() => file = File(path));
     return File(path).readAsBytesSync().toList();
   }
 
@@ -140,6 +149,7 @@ class _TranscribePageState extends State<TranscribePage> {
                 const SizedBox(
                   height: 10,
                 ),
+                //Transcribe button
                 Container(
                   child: is_Transcribing
                       ? const Padding(
@@ -173,7 +183,7 @@ class _TranscribePageState extends State<TranscribePage> {
                                         width: 35.0,
                                       ),
                                       Icon(
-                                        Iconsax.microphone,
+                                        Iconsax.folder,
                                         size: 30,
                                         color: Color(0xFF512DA8),
                                       ),
@@ -182,7 +192,7 @@ class _TranscribePageState extends State<TranscribePage> {
                                       ),
                                       Center(
                                         child: Text(
-                                          'Convert To Text',
+                                          'Pick an audio file',
                                           textAlign: TextAlign.center,
                                           style: TextStyle(
                                             fontFamily: 'Raleway',
