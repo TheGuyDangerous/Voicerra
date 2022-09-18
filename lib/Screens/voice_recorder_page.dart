@@ -613,6 +613,8 @@ class _RecPageState extends State<RecPage>
         ),
       ),
       body: TabBarView(
+        physics: const BouncingScrollPhysics(
+            parent: AlwaysScrollableScrollPhysics()),
         controller: _tabController,
         children: [
           Column(

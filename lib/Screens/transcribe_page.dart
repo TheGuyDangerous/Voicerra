@@ -19,13 +19,17 @@ class Transcriber extends StatelessWidget {
         primarySwatch: Colors.blue,
         fontFamily: 'poppins',
       ),
-      home: TranscribePage(),
+      home: const TranscribePage(
+        title: 'Transcribe',
+      ),
     );
   }
 }
 
 class TranscribePage extends StatefulWidget {
-  late final String title;
+  final String title;
+
+  const TranscribePage({super.key, required this.title});
 
   @override
   // ignore: library_private_types_in_public_api

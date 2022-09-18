@@ -153,8 +153,10 @@ class _MainPageState extends State<MainPage> {
   int index = 0;
   final List<Widget> screens = [
     const VoiceApp(),
-    TranscribePage(),
-    NotesPage(),
+    const TranscribePage(
+      title: 'Transcribe',
+    ),
+    const NotesPage(),
     const RecPage(),
   ];
 

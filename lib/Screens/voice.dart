@@ -4,7 +4,6 @@ import 'package:speech_to_text/speech_to_text.dart' as stt;
 import 'package:clipboard/clipboard.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:iconsax/iconsax.dart';
-import 'edit_note_page.dart';
 
 void main() {
   runApp(const VoiceApp());
@@ -13,7 +12,6 @@ void main() {
 class VoiceApp extends StatelessWidget {
   const VoiceApp({Key? key}) : super(key: key);
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -129,11 +127,6 @@ class _SpeechScreenState extends State<SpeechScreen> {
                     msg: "✓   Copied to Clipboard",
                     toastLength: Toast.LENGTH_SHORT,
                   );
-                  // ignore: use_build_context_synchronously
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const AddEditNotePage()));
                 },
                 child: const Icon(Iconsax.copy),
               ),
