@@ -4,6 +4,8 @@ import 'package:speech_to_text/speech_to_text.dart' as stt;
 import 'package:clipboard/clipboard.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:voicerra/Screens/about_page.dart';
+import 'package:voicerra/Screens/voice_beta.dart';
 
 void main() {
   runApp(const VoiceApp());
@@ -73,7 +75,6 @@ class _SpeechScreenState extends State<SpeechScreen> {
   bool _isListening = false;
   String _text = 'Voicerra!';
   double _confidence = 1.0;
-  bool _isCopied = false;
 
   @override
   void initState() {
@@ -93,6 +94,45 @@ class _SpeechScreenState extends State<SpeechScreen> {
           title: Text(
               'Confidence: ${(_confidence * 100.0).toStringAsFixed(1)}%',
               style: const TextStyle(fontFamily: 'Raleway', fontSize: 24.0)),
+          actions: [
+            PopupMenuButton(
+              shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(
+                  Radius.circular(20.0),
+                ),
+              ),
+              onSelected: (value) {
+                switch (value) {
+                  case 'About us':
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const AboutPage()),
+                    );
+                    break;
+                  case 'Try (Beta)':
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const BetaVoice()),
+                    );
+                    break;
+                }
+              },
+              itemBuilder: (BuildContext context) {
+                return ['About us', 'Try (Beta)'].map((String choice) {
+                  return PopupMenuItem(
+                    value: choice,
+                    child: Center(
+                        child: Text(
+                      choice,
+                      style: const TextStyle(fontFamily: 'Raleway'),
+                    )),
+                  );
+                }).toList();
+              },
+            ),
+          ],
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
         floatingActionButton: Padding(
@@ -111,7 +151,7 @@ class _SpeechScreenState extends State<SpeechScreen> {
                       const Color(0xFF2f2554),
                     )),
                 onPressed: _listen,
-                child: Icon(_isListening ? Icons.mic : Icons.mic_none),
+                child: Icon(_isListening ? Icons.mic : Icons.mic_off),
               ),
               Expanded(child: Container()),
               FloatingActionButton(
@@ -121,7 +161,6 @@ class _SpeechScreenState extends State<SpeechScreen> {
                 backgroundColor: Colors.blue.shade100,
                 foregroundColor: Colors.black,
                 onPressed: () async {
-                  setState(() => _isCopied = true);
                   await FlutterClipboard.copy(_text);
                   Fluttertoast.showToast(
                     msg: "✓   Copied to Clipboard",

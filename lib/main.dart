@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:voicerra/Screens/notes_page.dart';
+import 'package:voicerra/Screens/translate.dart';
 import 'package:voicerra/Screens/voice.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:voicerra/Screens/transcribe_page.dart';
 import 'package:voicerra/Screens/voice_recorder_page.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:flutter/services.dart';
 
 void main() {
   runApp(const MyApp());
@@ -156,12 +158,19 @@ class _MainPageState extends State<MainPage> {
     const TranscribePage(
       title: 'Transcribe',
     ),
+    const TranslatePage(),
     const NotesPage(),
     const RecPage(),
   ];
+  final style = const SystemUiOverlayStyle(
+    systemNavigationBarColor: Color(0xFFf6edfd),
+    systemNavigationBarDividerColor: Color(0xFFf6edfd),
+    systemNavigationBarIconBrightness: Brightness.dark,
+  );
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setSystemUIOverlayStyle(style);
     return Scaffold(
       bottomNavigationBar: NavigationBarTheme(
         data: NavigationBarThemeData(
@@ -179,11 +188,15 @@ class _MainPageState extends State<MainPage> {
           destinations: const [
             NavigationDestination(
               icon: Icon(Iconsax.microphone),
-              label: 'liveaudio',
+              label: 'Liveaudio',
             ),
             NavigationDestination(
               icon: Icon(Iconsax.book_saved),
               label: 'Transcribe',
+            ),
+            NavigationDestination(
+              icon: Icon(Icons.translate),
+              label: 'Translate',
             ),
             NavigationDestination(
               icon: Icon(Iconsax.note_1),

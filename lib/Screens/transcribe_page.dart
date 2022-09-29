@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:google_speech/speech_client_authenticator.dart';
 import 'package:google_speech/google_speech.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:loading_indicator/loading_indicator.dart';
@@ -10,6 +9,8 @@ import 'package:iconsax/iconsax.dart';
 import 'package:file_picker/file_picker.dart';
 
 class Transcriber extends StatelessWidget {
+  const Transcriber({super.key});
+
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
@@ -73,8 +74,6 @@ class _TranscribePageState extends State<TranscribePage> {
   }
 
   Future _getAudioContent(String name) async {
-    //final directory = await getApplicationDocumentsDirectory();
-    //final path = directory.path + '/$name';
     final result = await FilePicker.platform.pickFiles(
       allowMultiple: false,
       type: FileType.custom,
