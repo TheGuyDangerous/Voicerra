@@ -62,12 +62,10 @@ Conversion of speech into text using NLP algorithm
 ![Image](assets/images/readme8.png)
 
 ---
+
+### Refer this
 [Presentation Link][link]
 
 [link]: https://www.canva.com/design/DAFL7VmlLGM/Qyu6yU-HWp938SKF7U_48Q/view?utm_content=DAFL7VmlLGM&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton
 
-<<<<<<< HEAD
-![alt text](assets/images/readme1.png)
-=======
 
->>>>>>> a59b4c7 (Readme updated)
