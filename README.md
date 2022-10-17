@@ -49,12 +49,16 @@ Conversion of speech into text using NLP algorithm
 
 ---
 
-## Screenshots
+# Screenshots
 
 ![Image](assets/images/readme4.png)
+
 ![Image](assets/images/readme5.png)
+
 ![Image](assets/images/readme6.png)
+
 ![Image](assets/images/readme7.png)
+
 ![Image](assets/images/readme8.png)
 
 ---
