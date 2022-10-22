@@ -8,45 +8,23 @@ import 'dart:async';
 import 'package:iconsax/iconsax.dart';
 import 'package:file_picker/file_picker.dart';
 
-class Transcriber extends StatelessWidget {
-  const Transcriber({super.key});
-
-  // This widget is the root of your application.
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Transcribe Page',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-        fontFamily: 'poppins',
-      ),
-      home: const TranscribePage(
-        title: 'Transcribe',
-      ),
-    );
-  }
-}
-
 class TranscribePage extends StatefulWidget {
   final String title;
 
   const TranscribePage({super.key, required this.title});
 
   @override
-  // ignore: library_private_types_in_public_api
-  _TranscribePageState createState() => _TranscribePageState();
+  State<TranscribePage> createState() => _TranscribePageState();
 }
 
 class _TranscribePageState extends State<TranscribePage> {
-  // ignore: non_constant_identifier_names
-  bool is_Transcribing = false;
+  bool isTranscribing = false;
   String content = '';
   File? file;
 
   void transcribe() async {
     setState(() {
-      is_Transcribing = true;
+      isTranscribing = true;
     });
     final serviceAccount = ServiceAccount.fromString(
         (await rootBundle.loadString('assets/cloud.json')));
@@ -68,7 +46,7 @@ class _TranscribePageState extends State<TranscribePage> {
       });
     }).whenComplete(() {
       setState(() {
-        is_Transcribing = false;
+        isTranscribing = false;
       });
     });
   }
@@ -114,7 +92,7 @@ class _TranscribePageState extends State<TranscribePage> {
           height: MediaQuery.of(context).size.height,
           width: MediaQuery.of(context).size.width,
           decoration: const BoxDecoration(
-            color: Colors.white,
+            color: Color(0xFFf2f2f2),
             borderRadius: BorderRadius.only(
               topRight: Radius.circular(50),
               topLeft: Radius.circular(50),
@@ -125,24 +103,28 @@ class _TranscribePageState extends State<TranscribePage> {
               mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
                 const SizedBox(
-                  height: 70,
+                  height: 50,
                 ),
                 Container(
                   height: 200,
-                  width: 300,
+                  width: 350,
                   decoration: BoxDecoration(
-                    border: Border.all(color: Colors.black),
+                    color: Colors.white,
                     borderRadius: BorderRadius.circular(20),
                   ),
-                  padding: const EdgeInsets.all(5.0),
+                  padding: const EdgeInsets.all(20.0),
                   child: content == ''
-                      ? const Text(
-                          'Your text will appear here',
-                          style: TextStyle(color: Colors.grey),
+                      ? const Center(
+                          child: Text(
+                            'Your text will appear here',
+                            style: TextStyle(color: Colors.grey),
+                          ),
                         )
-                      : Text(
-                          content,
-                          style: const TextStyle(fontSize: 20),
+                      : Center(
+                          child: Text(
+                            content,
+                            style: const TextStyle(fontSize: 20),
+                          ),
                         ),
                 ),
                 const SizedBox(
@@ -150,7 +132,7 @@ class _TranscribePageState extends State<TranscribePage> {
                 ),
                 //Transcribe button
                 Container(
-                  child: is_Transcribing
+                  child: isTranscribing
                       ? const Padding(
                           padding: EdgeInsets.symmetric(
                               horizontal: 150, vertical: 70),
@@ -168,7 +150,7 @@ class _TranscribePageState extends State<TranscribePage> {
                       : Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: TextButton(
-                            onPressed: is_Transcribing ? () {} : transcribe,
+                            onPressed: isTranscribing ? () {} : transcribe,
                             child: Padding(
                               padding: const EdgeInsets.symmetric(
                                   vertical: 25, horizontal: 15),

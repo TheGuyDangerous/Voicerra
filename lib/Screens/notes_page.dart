@@ -62,7 +62,7 @@ class _NotesPageState extends State<NotesPage> {
             height: MediaQuery.of(context).size.height,
             width: MediaQuery.of(context).size.width,
             decoration: const BoxDecoration(
-              color: Colors.white,
+              color: Color(0xFFf2f2f2),
               borderRadius: BorderRadius.only(
                 topRight: Radius.circular(40),
                 topLeft: Radius.circular(40),

@@ -12,8 +12,7 @@ class AddEditNotePage extends StatefulWidget {
     this.note,
   }) : super(key: key);
   @override
-  // ignore: library_private_types_in_public_api
-  _AddEditNotePageState createState() => _AddEditNotePageState();
+  State<AddEditNotePage> createState() => _AddEditNotePageState();
 }
 
 class _AddEditNotePageState extends State<AddEditNotePage> {

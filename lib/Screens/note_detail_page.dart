@@ -13,7 +13,7 @@ class NoteDetailPage extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _NoteDetailPageState createState() => _NoteDetailPageState();
+  State<NoteDetailPage> createState() => _NoteDetailPageState();
 }
 
 class _NoteDetailPageState extends State<NoteDetailPage> {
@@ -30,43 +30,44 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
   Future refreshNote() async {
     setState(() => isLoading = true);
 
-    this.note = await NotesDatabase.instance.readNote(widget.noteId);
+    note = await NotesDatabase.instance.readNote(widget.noteId);
 
     setState(() => isLoading = false);
   }
 
   @override
   Widget build(BuildContext context) => Scaffold(
-        backgroundColor: Color(0xffe7ddff),
+        backgroundColor: const Color(0xfff2f2f2),
         appBar: AppBar(
-          backgroundColor: Color(0xFF2f2554),
+          backgroundColor: const Color(0xFF2f2554),
           centerTitle: true,
           actions: [editButton(), deleteButton()],
         ),
         body: isLoading
-            ? Center(child: CircularProgressIndicator())
+            ? const Center(child: CircularProgressIndicator())
             : Padding(
-                padding: EdgeInsets.all(12),
+                padding: const EdgeInsets.all(12),
                 child: ListView(
-                  padding: EdgeInsets.symmetric(vertical: 8),
+                  padding: const EdgeInsets.symmetric(vertical: 8),
                   children: [
                     Text(
                       note.title,
-                      style: TextStyle(
+                      style: const TextStyle(
                         color: Color(0xff263238),
                         fontSize: 22,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    SizedBox(height: 8),
+                    const SizedBox(height: 8),
                     Text(
                       DateFormat.yMMMd().format(note.createdTime),
-                      style: TextStyle(color: Colors.black26),
+                      style: const TextStyle(color: Colors.black26),
                     ),
-                    SizedBox(height: 8),
+                    const SizedBox(height: 8),
                     Text(
                       note.description,
-                      style: TextStyle(color: Color(0xff263238), fontSize: 18),
+                      style: const TextStyle(
+                          color: Color(0xff263238), fontSize: 18),
                     )
                   ],
                 ),
@@ -74,7 +75,7 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
       );
 
   Widget editButton() => IconButton(
-      icon: Icon(Icons.edit_outlined),
+      icon: const Icon(Icons.edit_outlined),
       onPressed: () async {
         if (isLoading) return;
 
@@ -86,11 +87,12 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
       });
 
   Widget deleteButton() => IconButton(
-        icon: Icon(Icons.delete),
+        icon: const Icon(Icons.delete),
         onPressed: () async {
+          final navigator = Navigator.of(context);
           await NotesDatabase.instance.delete(widget.noteId);
 
-          Navigator.of(context).pop();
+          navigator.pop();
         },
       );
 }

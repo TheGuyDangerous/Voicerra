@@ -7,10 +7,6 @@ import 'package:iconsax/iconsax.dart';
 import 'package:voicerra/Screens/about_page.dart';
 import 'package:voicerra/Screens/voice_beta.dart';
 
-void main() {
-  runApp(const VoiceApp());
-}
-
 class VoiceApp extends StatelessWidget {
   const VoiceApp({Key? key}) : super(key: key);
 
@@ -36,15 +32,12 @@ class SpeechScreen extends StatefulWidget {
   const SpeechScreen({super.key});
 
   @override
-  // ignore: library_private_types_in_public_api
-  _SpeechScreenState createState() => _SpeechScreenState();
+  State<SpeechScreen> createState() => _SpeechScreenState();
 }
 
 class _SpeechScreenState extends State<SpeechScreen> {
   final Map<String, HighlightedWord> _highlights = {
     'project': HighlightedWord(
-      // ignore: avoid_print
-      onTap: () => print('project'),
       textStyle: const TextStyle(
           color: Colors.blue,
           fontWeight: FontWeight.bold,
@@ -52,8 +45,6 @@ class _SpeechScreenState extends State<SpeechScreen> {
           fontSize: 24.0),
     ),
     'exhibition': HighlightedWord(
-      // ignore: avoid_print
-      onTap: () => print('exhibition'),
       textStyle: const TextStyle(
           color: Colors.green,
           fontWeight: FontWeight.bold,
@@ -61,8 +52,6 @@ class _SpeechScreenState extends State<SpeechScreen> {
           fontSize: 24.0),
     ),
     'group': HighlightedWord(
-      // ignore: avoid_print
-      onTap: () => print('group'),
       textStyle: const TextStyle(
           color: Colors.red,
           fontWeight: FontWeight.bold,
@@ -179,7 +168,7 @@ class _SpeechScreenState extends State<SpeechScreen> {
             height: MediaQuery.of(context).size.height,
             width: MediaQuery.of(context).size.width,
             decoration: const BoxDecoration(
-              color: Colors.white,
+              color: Color(0xFFf2f2f2),
               borderRadius: BorderRadius.only(
                 topRight: Radius.circular(50),
                 topLeft: Radius.circular(50),

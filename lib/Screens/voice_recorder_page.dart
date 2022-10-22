@@ -17,11 +17,10 @@ import 'package:voicerra/widget/mini_player.dart';
 import 'package:wakelock/wakelock.dart';
 
 class RecPage extends StatefulWidget {
-  const RecPage({Key? key}) : super(key: key);
+  const RecPage({super.key});
 
   @override
-  // ignore: library_private_types_in_public_api
-  _RecPageState createState() => _RecPageState();
+  State<RecPage> createState() => _RecPageState();
 }
 
 typedef Fn = void Function();

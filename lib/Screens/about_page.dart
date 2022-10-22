@@ -2,14 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:package_info_plus/package_info_plus.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 class AboutPage extends StatefulWidget {
-  const AboutPage({Key? key}) : super(key: key);
+  const AboutPage({super.key});
 
   @override
-  // ignore: library_private_types_in_public_api
-  _AboutPageState createState() => _AboutPageState();
+  State<AboutPage> createState() => _AboutPageState();
 }
 
 class _AboutPageState extends State<AboutPage> {
@@ -122,15 +121,11 @@ class _AboutPageState extends State<AboutPage> {
               InkWell(
                 borderRadius: BorderRadius.circular(15.0),
                 onTap: () async {
-                  if (await canLaunch(
-                      'https://www.linkedin.com/in/sannidhyadubey')) {
-                    await launch(
-                      'https://www.linkedin.com/in/sannidhyadubey',
-                      forceSafariVC: false,
-                      forceWebView: false,
-                    );
+                  const url = 'https://www.linkedin.com/in/sannidhyadubey';
+                  if (await launchUrlString(url)) {
+                    await launchUrlString(url);
                   } else {
-                    throw 'Could not launch';
+                    throw 'Could not launch $url';
                   }
                 },
                 child: const ListTile(
@@ -146,14 +141,11 @@ class _AboutPageState extends State<AboutPage> {
               InkWell(
                 borderRadius: BorderRadius.circular(15.0),
                 onTap: () async {
-                  if (await canLaunch('https://www.linkedin.com/in/roy15')) {
-                    await launch(
-                      'https://www.linkedin.com/in/roy15',
-                      forceSafariVC: false,
-                      forceWebView: false,
-                    );
+                  const url = 'https://www.linkedin.com/in/roy15';
+                  if (await launchUrlString(url)) {
+                    await launchUrlString(url);
                   } else {
-                    throw 'Could not launch';
+                    throw 'Could not launch $url';
                   }
                 },
                 child: const ListTile(
@@ -163,21 +155,18 @@ class _AboutPageState extends State<AboutPage> {
                     child: Icon(Iconsax.user),
                   ),
                   title: Text('Bishal Roy'),
-                  subtitle: Text('Lead Designer and Co-Lead'),
+                  subtitle: Text('Lead Designer'),
                 ),
               ),
               InkWell(
                 borderRadius: BorderRadius.circular(15.0),
                 onTap: () async {
-                  if (await canLaunch(
-                      'https://www.linkedin.com/in/sneha-soni-918224236/')) {
-                    await launch(
-                      'https://www.linkedin.com/in/sneha-soni-918224236/',
-                      forceSafariVC: false,
-                      forceWebView: false,
-                    );
+                  const url =
+                      'https://www.linkedin.com/in/sneha-soni-918224236';
+                  if (await launchUrlString(url)) {
+                    await launchUrlString(url);
                   } else {
-                    throw 'Could not launch';
+                    throw 'Could not launch $url';
                   }
                 },
                 child: const ListTile(
@@ -216,12 +205,10 @@ class _AboutPageState extends State<AboutPage> {
               InkWell(
                 borderRadius: BorderRadius.circular(15.0),
                 onTap: () async {
-                  if (await canLaunch(
-                      'https://www.linkedin.com/in/sannidhyadubey/')) {
-                    await launch(
-                      'https://www.linkedin.com/in/sannidhyadubey/',
-                      forceSafariVC: false,
-                      forceWebView: false,
+                  if (await launchUrlString(
+                      'https://www.linkedin.com/in/sannidhyadubey')) {
+                    await launchUrlString(
+                      'https://www.linkedin.com/in/sannidhyadubey',
                     );
                   } else {
                     throw 'Could not launch';
@@ -240,12 +227,10 @@ class _AboutPageState extends State<AboutPage> {
               InkWell(
                 borderRadius: BorderRadius.circular(15.0),
                 onTap: () async {
-                  if (await canLaunch(
-                      'https://github.com/TheGuyDangerous/Aawaaz')) {
-                    await launch(
-                      'https://github.com/TheGuyDangerous/Aawaaz',
-                      forceSafariVC: false,
-                      forceWebView: false,
+                  if (await launchUrlString(
+                      'https://github.com/TheGuyDangerous/Voicerra')) {
+                    await launchUrlString(
+                      'https://github.com/TheGuyDangerous/Voicerra',
                     );
                   } else {
                     throw 'Could not launch';
@@ -264,12 +249,10 @@ class _AboutPageState extends State<AboutPage> {
               InkWell(
                 borderRadius: BorderRadius.circular(15.0),
                 onTap: () async {
-                  if (await canLaunch(
-                      'https://github.com/TheGuyDangerous/Aawaaz/issues/new')) {
-                    await launch(
-                      'https://github.com/TheGuyDangerous/Aawaaz/issues/new',
-                      forceSafariVC: false,
-                      forceWebView: false,
+                  if (await launchUrlString(
+                      'https://github.com/TheGuyDangerous/Voicerra/issues/new')) {
+                    await launchUrlString(
+                      'https://github.com/TheGuyDangerous/Voicerra/issues/new',
                     );
                   } else {
                     throw 'Could not launch';
@@ -288,11 +271,9 @@ class _AboutPageState extends State<AboutPage> {
               InkWell(
                 borderRadius: BorderRadius.circular(15.0),
                 onTap: () async {
-                  if (await canLaunch('https://paypal.me/GuyDangerous')) {
-                    await launch(
+                  if (await launchUrlString('https://paypal.me/GuyDangerous')) {
+                    await launchUrlString(
                       'https://paypal.me/GuyDangerous',
-                      forceSafariVC: false,
-                      forceWebView: false,
                     );
                   } else {
                     throw 'Could not launch';
