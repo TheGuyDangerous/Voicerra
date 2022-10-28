@@ -5,7 +5,7 @@ name: Flutter CI
 on:
   push:
     branches:
-    - master
+    - beta
     
 # on: push    # Default will running for every branch.
     
@@ -30,8 +30,6 @@ jobs:
     # Get flutter dependencies.
     - run: flutter pub get
     
-    # Check for any formatting issues in the code.
-    - run: flutter format --set-exit-if-changed .
     
     # Build apk.
     - run: flutter build apk
