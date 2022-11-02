@@ -42,14 +42,14 @@ class NoteFormWidget extends StatelessWidget {
         maxLines: 1,
         initialValue: title,
         style: const TextStyle(
-          color: Color(0xff263238),
+          color: Color(0xff808080),
           fontWeight: FontWeight.bold,
           fontSize: 24,
         ),
-        decoration: const InputDecoration(
+        decoration: InputDecoration(
           border: InputBorder.none,
           hintText: 'Title',
-          hintStyle: TextStyle(color: Color(0xff263238)),
+          hintStyle: TextStyle(),
         ),
         validator: (title) =>
             title != null && title.isEmpty ? 'The title cannot be empty' : null,
@@ -59,11 +59,11 @@ class NoteFormWidget extends StatelessWidget {
   Widget buildDescription() => TextFormField(
         maxLines: 50,
         initialValue: description,
-        style: const TextStyle(color: Color(0xff263238), fontSize: 18),
-        decoration: const InputDecoration(
+        style: TextStyle(fontSize: 25),
+        decoration: InputDecoration(
           border: InputBorder.none,
-          hintText: 'Type something...',
-          hintStyle: TextStyle(color: Color(0xff263238)),
+          hintText: 'Type your dukh dard...',
+          hintStyle: TextStyle(fontSize: 15),
         ),
         validator: (title) => title != null && title.isEmpty
             ? 'The description cannot be empty'

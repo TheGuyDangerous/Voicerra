@@ -1,68 +1,28 @@
 import 'package:flutter/material.dart';
-import 'package:highlight_text/highlight_text.dart';
+import 'package:voicerra/Screens/about_page.dart';
+import 'package:voicerra/Screens/continuous.dart';
+import 'package:voicerra/Screens/translate.dart';
+import 'package:voicerra/widget/BarIndicator.dart';
+import 'package:voicerra/widget/customappbar.dart';
+import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
-import 'package:clipboard/clipboard.dart';
+import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:voicerra/Screens/about_page.dart';
-import 'package:voicerra/Screens/voice_beta.dart';
+import 'package:voicerra/widget/glass.dart';
+import 'package:voicerra/widget/more_options_card_widget.dart';
 
-class VoiceApp extends StatelessWidget {
+class VoiceApp extends StatefulWidget {
   const VoiceApp({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Voicerra',
-      theme: ThemeData(
-          primarySwatch: Colors.blue,
-          elevatedButtonTheme: ElevatedButtonThemeData(
-              style: ElevatedButton.styleFrom(
-                  elevation: 12,
-                  minimumSize: const Size.square(52),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  )))),
-      home: const SpeechScreen(),
-    );
-  }
+  State<VoiceApp> createState() => _VoiceAppState();
 }
 
-class SpeechScreen extends StatefulWidget {
-  const SpeechScreen({super.key});
-
-  @override
-  State<SpeechScreen> createState() => _SpeechScreenState();
-}
-
-class _SpeechScreenState extends State<SpeechScreen> {
-  final Map<String, HighlightedWord> _highlights = {
-    'project': HighlightedWord(
-      textStyle: const TextStyle(
-          color: Colors.blue,
-          fontWeight: FontWeight.bold,
-          fontFamily: 'Raleway',
-          fontSize: 24.0),
-    ),
-    'exhibition': HighlightedWord(
-      textStyle: const TextStyle(
-          color: Colors.green,
-          fontWeight: FontWeight.bold,
-          fontFamily: 'Raleway',
-          fontSize: 24.0),
-    ),
-    'group': HighlightedWord(
-      textStyle: const TextStyle(
-          color: Colors.red,
-          fontWeight: FontWeight.bold,
-          fontFamily: 'Raleway',
-          fontSize: 24.0),
-    ),
-  };
-
+class _VoiceAppState extends State<VoiceApp> {
   late stt.SpeechToText _speech;
   bool _isListening = false;
-  String _text = 'Voicerra!';
+  String _text = 'Press the mic icon to start';
   double _confidence = 1.0;
 
   @override
@@ -73,122 +33,206 @@ class _SpeechScreenState extends State<SpeechScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final panelHeightClosed = MediaQuery.of(context).size.height * 0.3;
+    final panelHeightOpen = MediaQuery.of(context).size.height * 0.7;
     return Scaffold(
-        backgroundColor: const Color(0xFF2f2554),
-        appBar: AppBar(
-          toolbarHeight: 80,
-          backgroundColor: const Color(0xFF2f2554),
-          elevation: 0,
-          centerTitle: true,
-          title: Text(
-              'Confidence: ${(_confidence * 100.0).toStringAsFixed(1)}%',
-              style: const TextStyle(fontFamily: 'Raleway', fontSize: 24.0)),
-          actions: [
-            PopupMenuButton(
-              shape: const RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(
-                  Radius.circular(20.0),
+      backgroundColor: Theme.of(context).colorScheme.surface,
+      body: SafeArea(
+        child: Stack(
+          children: [
+            MyAppBar(
+              title: 'Voicerra',
+              onIconTap: _listen,
+              iconName: Iconsax.microphone,
+            ),
+            SlidingUpPanel(
+              minHeight: panelHeightClosed,
+              maxHeight: panelHeightOpen,
+              backdropEnabled: true, //darken background if panel is open
+              parallaxEnabled: true,
+              color: Colors.transparent,
+              panel: Container(
+                decoration: BoxDecoration(
+                  // background color of panel
+                  color: Theme.of(context).colorScheme.onSecondary,
+                  // rounded corners of panel
+                  borderRadius: const BorderRadius.only(
+                    topLeft: Radius.circular(24.0),
+                    topRight: Radius.circular(24.0),
+                  ),
+                ),
+                child: SingleChildScrollView(
+                  physics: const BouncingScrollPhysics(),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const BarIndicator(),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 20, right: 20),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                SizedBox(
+                                  width: MediaQuery.of(context).size.width / 4,
+                                ),
+                                Text(
+                                  'Transcribed Text',
+                                  style: TextStyle(
+                                    fontSize: 24.0,
+                                    fontFamily: 'Raleway',
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .onBackground,
+                                    fontWeight: FontWeight.w400,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            GestureDetector(
+                              onTap: _copy,
+                              child: Container(
+                                padding: const EdgeInsets.all(12),
+                                decoration: BoxDecoration(
+                                  border: Border.all(
+                                      color: const Color(0x28ffffff)),
+                                  borderRadius: BorderRadius.circular(16),
+                                  color: const Color(0xff272727),
+                                ),
+                                child: const Icon(
+                                  Iconsax.copy,
+                                  size: 20,
+                                  color: Color(0xa1ffffff),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: TextSelectionTheme(
+                          data: const TextSelectionThemeData(
+                              selectionColor: Colors.black,
+                              selectionHandleColor: Colors.black),
+                          child: SelectableText(
+                            textAlign: TextAlign.center,
+                            _text,
+                            style: TextStyle(
+                              fontFamily: 'Raleway',
+                              fontSize: 24.0,
+                              color: Theme.of(context).colorScheme.onBackground,
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
-              onSelected: (value) {
-                switch (value) {
-                  case 'About us':
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const AboutPage()),
-                    );
-                    break;
-                  case 'Try (Beta)':
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const BetaVoice()),
-                    );
-                    break;
-                }
-              },
-              itemBuilder: (BuildContext context) {
-                return ['About us', 'Try (Beta)'].map((String choice) {
-                  return PopupMenuItem(
-                    value: choice,
-                    child: Center(
-                        child: Text(
-                      choice,
-                      style: const TextStyle(fontFamily: 'Raleway'),
-                    )),
-                  );
-                }).toList();
-              },
+              collapsed: Container(
+                decoration: BoxDecoration(
+                  color: Theme.of(context).colorScheme.onSecondary,
+                  borderRadius: const BorderRadius.only(
+                    topLeft: Radius.circular(24.0),
+                    topRight: Radius.circular(24.0),
+                  ),
+                ),
+                child: Column(
+                  children: [
+                    const BarIndicator(),
+                    Center(
+                      child: Text(
+                        "Swipe Up for more",
+                        style: TextStyle(
+                            color: Theme.of(context).colorScheme.onBackground,
+                            fontFamily: 'Raleway'),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 44,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: TextSelectionTheme(
+                        data: const TextSelectionThemeData(
+                            selectionColor: Colors.black,
+                            selectionHandleColor: Colors.black),
+                        child: SelectableText(
+                          textAlign: TextAlign.center,
+                          _text,
+                          style: TextStyle(
+                            fontFamily: 'Raleway',
+                            fontSize: 24.0,
+                            color: Theme.of(context).colorScheme.onBackground,
+                            fontWeight: FontWeight.w400,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              body: Column(
+                children: [
+                  const SizedBox(
+                    height: 130,
+                  ),
+                  SizedBox(
+                    height: 60,
+                    child: ListView(
+                      shrinkWrap: true,
+                      physics: const BouncingScrollPhysics(),
+                      scrollDirection: Axis.horizontal,
+                      children: [
+                        OptionsCard(
+                          cardTitle: 'Nonstop Mode',
+                          iconName: Iconsax.microphone,
+                          pageName: const ContinuousVoiceApp(),
+                          iconColor: const Color(0xff006a53),
+                          darkGradientColor: const Color(0xffd1ffeb),
+                          titleColor: const Color(0xff006a53),
+                          lightGradientColor: const Color(0xffd1ffeb),
+                        ),
+                        OptionsCard(
+                          cardTitle: 'Translate',
+                          iconName: Icons.translate,
+                          pageName: const TranslatePage(),
+                          iconColor: const Color(0xff006a53),
+                          darkGradientColor: const Color(0xffd1ffeb),
+                          titleColor: const Color(0xff006a53),
+                          lightGradientColor: const Color(0xffd1ffeb),
+                        ),
+                        OptionsCard(
+                          cardTitle: 'Settings',
+                          iconName: Icons.person_outline_sharp,
+                          pageName: const AboutPage(),
+                          iconColor: const Color(0xff006a53),
+                          darkGradientColor: const Color(0xffd1ffeb),
+                          titleColor: const Color(0xff006a53),
+                          lightGradientColor: const Color(0xffd1ffeb),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 40),
+                  Glass(listening: _isListening, confidence: _confidence),
+                  const Spacer(
+                    flex: 3,
+                  ),
+                ],
+              ),
             ),
           ],
         ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-        floatingActionButton: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              ElevatedButton(
-                style: ButtonStyle(
-                    backgroundColor:
-                        MaterialStateProperty.all<Color>(Colors.blue.shade100),
-                    foregroundColor:
-                        MaterialStateProperty.all<Color>(Colors.black),
-                    overlayColor: getColor(
-                      const Color(0xFFf6edfd),
-                      const Color(0xFF2f2554),
-                    )),
-                onPressed: _listen,
-                child: Icon(_isListening ? Icons.mic : Icons.mic_off),
-              ),
-              Expanded(child: Container()),
-              FloatingActionButton(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                backgroundColor: Colors.blue.shade100,
-                foregroundColor: Colors.black,
-                onPressed: () async {
-                  await FlutterClipboard.copy(_text);
-                  Fluttertoast.showToast(
-                    msg: "✓   Copied to Clipboard",
-                    toastLength: Toast.LENGTH_SHORT,
-                  );
-                },
-                child: const Icon(Iconsax.copy),
-              ),
-            ],
-          ),
-        ),
-        body: SingleChildScrollView(
-          physics: const BouncingScrollPhysics(
-              parent: AlwaysScrollableScrollPhysics()),
-          child: Container(
-            height: MediaQuery.of(context).size.height,
-            width: MediaQuery.of(context).size.width,
-            decoration: const BoxDecoration(
-              color: Color(0xFFf2f2f2),
-              borderRadius: BorderRadius.only(
-                topRight: Radius.circular(50),
-                topLeft: Radius.circular(50),
-              ),
-            ),
-            child: Container(
-              padding: const EdgeInsets.fromLTRB(30.0, 30.0, 30.0, 150.0),
-              child: TextHighlight(
-                text: _text,
-                words: _highlights,
-                textStyle: const TextStyle(
-                  fontFamily: 'Raleway',
-                  fontSize: 24.0,
-                  color: Colors.black,
-                  fontWeight: FontWeight.w400,
-                ),
-              ),
-            ),
-          ),
-        ));
+      ),
+    );
   }
 
   void _listen() async {
@@ -216,15 +260,11 @@ class _SpeechScreenState extends State<SpeechScreen> {
     }
   }
 
-  getColor(Color color, Color colorPressed) {
-    getColor(Set<MaterialState> states) {
-      if (states.contains(MaterialState.pressed)) {
-        return colorPressed;
-      } else {
-        return color;
-      }
-    }
-
-    return MaterialStateProperty.resolveWith(getColor);
+  void _copy() async {
+    await Clipboard.setData(ClipboardData(text: _text));
+    Fluttertoast.showToast(
+      msg: "✓   Copied to Clipboard",
+      toastLength: Toast.LENGTH_SHORT,
+    );
   }
 }

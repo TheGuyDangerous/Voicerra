@@ -1,9 +1,11 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:loading_indicator/loading_indicator.dart';
 import 'package:logger/logger.dart';
@@ -11,9 +13,10 @@ import 'package:share_plus/share_plus.dart';
 import 'package:sliding_sheet/sliding_sheet.dart';
 import 'package:flutter_sound/flutter_sound.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
 import 'package:voicerra/utils/utils.dart';
-import 'package:voicerra/widget/mini_player.dart';
+import 'package:voicerra/widget/BarIndicator.dart';
 import 'package:wakelock/wakelock.dart';
 
 class RecPage extends StatefulWidget {
@@ -27,15 +30,10 @@ typedef Fn = void Function();
 
 class _RecPageState extends State<RecPage>
     with SingleTickerProviderStateMixin, WidgetsBindingObserver {
-  static const List<Tab> tabs = <Tab>[
-    Tab(text: 'Record'),
-    Tab(text: 'Play'),
-  ];
-
   FlutterSoundPlayer? audioPlayer = FlutterSoundPlayer();
   FlutterSoundRecorder? _mRecorder = FlutterSoundRecorder();
   final StopWatchTimer _stopWatchTimer = StopWatchTimer();
-  late TabController _tabController;
+
   final Codec _codec = Codec.pcm16WAV;
   final String _fileExtension = 'wav';
   Duration duration = const Duration();
@@ -46,7 +44,6 @@ class _RecPageState extends State<RecPage>
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: tabs.length, vsync: this);
 
     openTheRecorder();
     audioPlayer!.openPlayer();
@@ -63,7 +60,6 @@ class _RecPageState extends State<RecPage>
     _mRecorder!.closeRecorder();
     _mRecorder = null;
 
-    _tabController.dispose();
     super.dispose();
   }
 
@@ -203,39 +199,45 @@ class _RecPageState extends State<RecPage>
   @override
   Widget build(BuildContext context) {
     void saveAudioBottomSheet() async {
+      //TO SAVE AUDIO USING BOTTOM SHEET
       TextEditingController recordingTitle = TextEditingController();
       String? selectedCategory;
 
       await showSlidingBottomSheet(
         context,
         builder: (BuildContext context) {
+          //record bottom sheet builder
           return SlidingSheetDialog(
             elevation: 8,
             cornerRadius: 15,
-            color: const Color(0xFFF2F2F2),
+            color: Theme.of(context).colorScheme.onSecondary,
             builder: (context, state) {
               return Material(
                 child: StatefulBuilder(
                   builder: (BuildContext context,
                       void Function(void Function()) setState) {
                     return Container(
-                      color: const Color(0xFFF2F2F2),
+                      color: Theme.of(context).colorScheme.onSecondary,
                       padding: const EdgeInsets.only(
                           left: 24, right: 24, top: 30, bottom: 30),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Padding(
-                            padding: EdgeInsets.only(bottom: 12.0),
+                          Padding(
+                            padding: const EdgeInsets.only(bottom: 12.0),
                             child: Text(
-                              'Save Recording',
+                              'Save Recording', //record bottom sheet title
                               style: TextStyle(
                                 fontFamily: 'Raleway',
                                 fontSize: 20.0,
-                                color: Color(0xFF23262F),
+                                color:
+                                    Theme.of(context).colorScheme.onBackground,
                                 fontWeight: FontWeight.w500,
                               ),
                             ),
+                          ),
+                          const SizedBox(
+                            height: 5,
                           ),
                           TextField(
                             controller: recordingTitle,
@@ -252,7 +254,8 @@ class _RecPageState extends State<RecPage>
                             ],
                             textCapitalization: TextCapitalization.sentences,
                             decoration: const InputDecoration(
-                              labelText: 'Name the recording',
+                              labelText:
+                                  'Name the recording', //record bottom sheet hint text
                             ),
                           ),
                         ],
@@ -263,8 +266,9 @@ class _RecPageState extends State<RecPage>
               );
             },
             footerBuilder: (context, state) {
+              //SAVE OR CANCEL BOTTOM SHEET BUTTONS
               return Container(
-                color: const Color(0xFFF2F2F2),
+                color: Theme.of(context).colorScheme.onSecondary,
                 child: Padding(
                   padding: const EdgeInsets.only(
                       left: 24.0, right: 24.0, bottom: 24.0),
@@ -278,18 +282,20 @@ class _RecPageState extends State<RecPage>
                             child: ElevatedButton(
                               onPressed: () => Navigator.pop(context),
                               style: ElevatedButton.styleFrom(
-                                backgroundColor: const Color(0xFFbbdefb),
+                                backgroundColor: const Color(0xff006a53),
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(10),
                                   side: BorderSide.none,
                                 ),
                               ),
-                              child: const Text(
-                                'Cancel',
+                              child: Text(
+                                'Cancel', //cancel button of record bottom sheet
                                 style: TextStyle(
                                   fontFamily: 'Raleway',
                                   fontSize: 16.0,
-                                  color: Color(0xFF969AA0),
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .onBackground,
                                   fontWeight: FontWeight.w500,
                                 ),
                               ),
@@ -331,7 +337,7 @@ class _RecPageState extends State<RecPage>
                                                   .colorScheme
                                                   ?.primary)),
                               child: Text(
-                                'Save',
+                                'Save', //save button of record bottom sheet
                                 style: Theme.of(context)
                                     .textTheme
                                     .bodyText1!
@@ -357,25 +363,27 @@ class _RecPageState extends State<RecPage>
     }
 
     void rename(File file) async {
+      //rename function
       String path = file.path;
 
       TextEditingController recordingTitle = TextEditingController();
       String? selectedCategory;
 
       await showSlidingBottomSheet(
+        //rename bottom sheet builder
         context,
         builder: (BuildContext context) {
           return SlidingSheetDialog(
             elevation: 8,
             cornerRadius: 15,
-            color: const Color(0xFFF2F2F2),
+            color: Colors.transparent, //rename bottom sheet color
             builder: (context, state) {
               return Material(
                 child: StatefulBuilder(
                   builder: (BuildContext context,
                       void Function(void Function()) setState) {
                     return Container(
-                      color: const Color(0xFFF2F2F2),
+                      color: Theme.of(context).colorScheme.onSecondary,
                       padding: const EdgeInsets.only(
                           left: 24, right: 24, top: 30, bottom: 30),
                       child: Column(
@@ -384,12 +392,15 @@ class _RecPageState extends State<RecPage>
                           Padding(
                             padding: const EdgeInsets.only(bottom: 12.0),
                             child: Text(
-                              'Rename',
+                              'Rename', //rename bottom sheet title
                               style: Theme.of(context)
                                   .textTheme
                                   .headline2!
                                   .copyWith(fontSize: 20),
                             ),
+                          ),
+                          const SizedBox(
+                            height: 5,
                           ),
                           TextField(
                             controller: recordingTitle,
@@ -404,7 +415,8 @@ class _RecPageState extends State<RecPage>
                             ],
                             textCapitalization: TextCapitalization.sentences,
                             decoration: const InputDecoration(
-                              labelText: 'New Name',
+                              labelText:
+                                  'New Name', //rename bottom sheet hint text
                             ),
                           ),
                         ],
@@ -416,7 +428,8 @@ class _RecPageState extends State<RecPage>
             },
             footerBuilder: (context, state) {
               return Container(
-                color: const Color(0xFFF2F2F2),
+                //bottom Save or Cancel buttons of record bottom sheet
+                color: Theme.of(context).colorScheme.onSecondary,
                 child: Padding(
                   padding: const EdgeInsets.only(
                       left: 24.0, right: 24.0, bottom: 24.0),
@@ -440,7 +453,7 @@ class _RecPageState extends State<RecPage>
                                                   .colorScheme
                                                   ?.secondary)),
                               child: Text(
-                                'Cancel',
+                                'Cancel', //cancel button of rename bottom sheet
                                 style: Theme.of(context)
                                     .textTheme
                                     .bodyText1!
@@ -456,6 +469,7 @@ class _RecPageState extends State<RecPage>
                           child: SizedBox(
                             height: 40,
                             child: ElevatedButton(
+                              //save button for rename
                               onPressed: () async {
                                 String now =
                                     DateFormat.yMMMMd().format(DateTime.now());
@@ -491,7 +505,7 @@ class _RecPageState extends State<RecPage>
                                                   .colorScheme
                                                   ?.primary)),
                               child: Text(
-                                'Save',
+                                'Save', //save of rename bottom sheet
                                 style: Theme.of(context)
                                     .textTheme
                                     .bodyText1!
@@ -521,15 +535,19 @@ class _RecPageState extends State<RecPage>
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
+            //popup dialogue fo delete option
             elevation: 8,
-            backgroundColor: const Color(0xFFF2F2F2),
+            backgroundColor: Theme.of(context).colorScheme.onTertiary,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(15),
             ),
-            title: const Text(
-              'Are you sure you want to delete this audio?',
-              style: TextStyle(
-                fontFamily: 'Raleway',
+            title: Center(
+              child: const Text(
+                'Are you sure bro ?',
+                style: TextStyle(
+                  fontFamily: 'Raleway',
+                  color: Colors.white,
+                ),
               ),
             ),
             actions: [
@@ -549,7 +567,7 @@ class _RecPageState extends State<RecPage>
                                     .colorScheme
                                     ?.secondary)),
                     child: Text(
-                      'No',
+                      'No', //No button for delete popup dialogue
                       style: Theme.of(context)
                           .textTheme
                           .bodyText1!
@@ -579,7 +597,7 @@ class _RecPageState extends State<RecPage>
                                     .colorScheme
                                     ?.primary)),
                     child: Text(
-                      'Yes',
+                      'Yes', // yes button for delete popup dialogue
                       style: Theme.of(context).textTheme.bodyText1!.copyWith(
                           fontSize: 16,
                           color: Theme.of(context)
@@ -596,293 +614,673 @@ class _RecPageState extends State<RecPage>
       );
     }
 
+    final panelHeightClosed = MediaQuery.of(context).size.height * 0.3;
+    final panelHeightOpen = MediaQuery.of(context).size.height * 0.7;
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: const Color(0xFF2f2554),
-        elevation: 0.0,
-        actionsIconTheme: const IconThemeData(color: Color(0xFF323232)),
-        centerTitle: true,
-        toolbarHeight: 90,
-        title: const Text('Record Notes',
-            style: TextStyle(
-                fontFamily: 'Raleway', fontSize: 24.0, color: Colors.white)),
-        bottom: TabBar(
-          tabs: const [Tab(text: 'Record'), Tab(text: 'Play')],
-          controller: _tabController,
-        ),
-      ),
-      body: TabBarView(
-        physics: const BouncingScrollPhysics(
-            parent: AlwaysScrollableScrollPhysics()),
-        controller: _tabController,
-        children: [
-          Column(
-            children: [
-              const SizedBox(height: 40),
-              StreamBuilder<int>(
-                stream: _stopWatchTimer.rawTime,
-                initialData: 0,
-                builder: (context, snap) {
-                  final value = snap.data;
-                  final displayTime = StopWatchTimer.getDisplayTime(value!);
-                  return Text(
-                    displayTime,
-                    style: Theme.of(context)
-                        .textTheme
-                        .headline1!
-                        .copyWith(fontSize: 38),
-                  );
-                },
-              ),
-              Padding(
-                padding: const EdgeInsets.only(bottom: 40.0),
-                child: Text(
-                  'High Quality',
-                  style: Theme.of(context).textTheme.subtitle1,
-                ),
-              ),
-              const Spacer(),
-              Container(
-                  child: _mRecorder!.isRecording
-                      ? const Padding(
-                          padding: EdgeInsets.symmetric(
-                              horizontal: 150, vertical: 70),
-                          child: SizedBox(
-                            child: LoadingIndicator(
-                              indicatorType: Indicator.lineScalePulseOutRapid,
-                              colors: [
-                                Colors.red,
-                                Color(0xFF2f2554),
-                                Color(0xFFD1C4E9),
-                              ],
-                            ),
-                          ),
-                        )
-                      : Container(
-                          height: 170,
-                          color: const Color(0xFFf2f2f2),
-                        )),
-              const Spacer(),
-              Padding(
-                padding: const EdgeInsets.only(
-                    bottom: 24.0, left: 24.0, right: 24.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    Visibility(
-                      visible: _mRecorder!.isPaused ? true : false,
-                      maintainSize: true,
-                      maintainAnimation: true,
-                      maintainState: true,
-                      child: IconButton(
-                        onPressed: () => cancelRecord(),
-                        icon: const Icon(Icons.close),
+      //scaffold of the recording page
+      backgroundColor: Theme.of(context).colorScheme.surface,
+      body: SafeArea(
+        child: Stack(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(25.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 8.0),
+                      child: Text(
+                        'Recorder',
+                        style: GoogleFonts.bebasNeue(
+                          fontSize: 52,
+                          color: Theme.of(context).colorScheme.onBackground,
+                        ),
                       ),
                     ),
-                    SizedBox(
-                      width: 56,
-                      height: 56,
-                      child: ElevatedButton(
-                        onPressed: getRecorderFn(),
-                        style: ButtonStyle(
-                          backgroundColor: MaterialStateProperty.all<Color>(
-                              _mRecorder!.isRecording
-                                  ? const Color(0xFFFF5656)
-                                  : Colors.white),
-                          shape:
-                              MaterialStateProperty.all<RoundedRectangleBorder>(
-                            RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(50),
-                              side: const BorderSide(
-                                  color: Color(0xFF2f2554), width: 8),
-                            ),
+                  ),
+                  Container(
+                    height: 62,
+                    width: 62,
+                    padding: const EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      border: Border.all(color: const Color(0x28ffffff)),
+                      borderRadius: BorderRadius.circular(16),
+                      color: Theme.of(context).colorScheme.onSecondary,
+                    ),
+                    child: Container(
+                        child: _mRecorder!.isRecording
+                            ? const LoadingIndicator(
+                                indicatorType: Indicator.lineScalePulseOutRapid,
+                                colors: [
+                                  Color(0xffcabde4),
+                                  Colors.deepPurpleAccent,
+                                  Color(0xFFFF0005),
+                                ],
+                              )
+                            : Icon(
+                                FluentIcons.record_12_regular,
+                                color:
+                                    Theme.of(context).colorScheme.onBackground,
+                                size: 36,
+                              )),
+                  ),
+                ],
+              ),
+            ),
+            SlidingUpPanel(
+              minHeight: panelHeightClosed,
+              maxHeight: panelHeightOpen,
+              backdropEnabled: true, //darken background if panel is open
+              parallaxEnabled: true,
+              color: Colors.transparent,
+              panel: Container(
+                decoration: BoxDecoration(
+                  // background color of panel
+                  color: Theme.of(context).colorScheme.onSecondary,
+                  // rounded corners of panel
+                  borderRadius: const BorderRadius.only(
+                    topLeft: Radius.circular(24.0),
+                    topRight: Radius.circular(24.0),
+                  ),
+                ),
+                child: SingleChildScrollView(
+                  physics: const BouncingScrollPhysics(),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const BarIndicator(),
+                      Text(
+                        'Recordings',
+                        style: TextStyle(
+                          fontSize: 24.0,
+                          fontFamily: 'Raleway',
+                          color: Theme.of(context).colorScheme.onBackground,
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 5,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: Padding(
+                          padding:
+                              const EdgeInsets.only(top: 10.0, bottom: 15.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              FutureBuilder(
+                                future: getDirectory(),
+                                builder: (BuildContext context,
+                                    AsyncSnapshot<dynamic> snapshot) {
+                                  if (snapshot.hasData) {
+                                    Directory dir = snapshot.data;
+                                    List<FileSystemEntity?> audiosFiles = dir
+                                        .listSync(
+                                            recursive: true, followLinks: false)
+                                        .map((file) {
+                                      if (file.statSync().type ==
+                                          FileSystemEntityType.file) {
+                                        return file;
+                                      }
+                                    }).toList();
+
+                                    audiosFiles.removeWhere(
+                                        (element) => element == null);
+
+                                    if (audiosFiles.isEmpty) {
+                                      return Center(
+                                        child: Text(
+                                          'No recordings', // show when there are no recordings saved
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .bodyText1,
+                                        ),
+                                      );
+                                    }
+
+                                    return ListView.builder(
+                                      //builds for sliding panel is open
+                                      //list view to display the recordings in a list
+                                      shrinkWrap: true,
+                                      physics:
+                                          const BouncingScrollPhysics(), //bouncing physics
+                                      itemCount: audiosFiles.length,
+                                      itemBuilder:
+                                          (BuildContext context, int index) {
+                                        File audioFile =
+                                            File(audiosFiles[index]!.path);
+
+                                        DateFormat dayFormat = DateFormat.yMd();
+                                        DateFormat timeFormat = DateFormat.Hm();
+                                        String fileSize = getFileSize(
+                                            audioFile.lengthSync(), 1);
+                                        DateTime createdAt =
+                                            audioFile.lastModifiedSync();
+                                        String createdAtFormatted = '';
+                                        String fileName = audioFile.name ??
+                                            'Recording'; //checks if file name starts with recording
+
+                                        if (createdAt.isToday()) {
+                                          createdAtFormatted =
+                                              timeFormat.format(createdAt);
+                                        } else {
+                                          createdAtFormatted =
+                                              dayFormat.format(createdAt);
+                                        }
+
+                                        return Padding(
+                                          padding:
+                                              const EdgeInsets.only(top: 10.0),
+                                          child: Container(
+                                            padding: const EdgeInsets.all(10),
+                                            decoration: BoxDecoration(
+                                              borderRadius:
+                                                  const BorderRadius.all(
+                                                      Radius.circular(15)),
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .onTertiary,
+                                            ),
+                                            child: Padding(
+                                              padding: const EdgeInsets.only(
+                                                  bottom: 5, top: 5),
+                                              child: ListTile(
+                                                onTap: () {},
+                                                title: Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceBetween,
+                                                  children: [
+                                                    Expanded(
+                                                      child: Text(
+                                                        fileName, //name of the file formatting inside the list of recordings
+                                                        maxLines: 1,
+                                                        style: Theme.of(context)
+                                                            .textTheme
+                                                            .headline2,
+                                                      ),
+                                                    ),
+                                                    Text(
+                                                      createdAtFormatted,
+                                                      style: Theme.of(context)
+                                                          .textTheme
+                                                          .subtitle2,
+                                                    )
+                                                  ],
+                                                ),
+                                                subtitle: Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceBetween,
+                                                  children: [
+                                                    if (isPlaying(index))
+                                                      Text(
+                                                        //duration of the recording
+                                                        durationFormat(
+                                                            duration),
+                                                        style: Theme.of(context)
+                                                            .textTheme
+                                                            .subtitle2,
+                                                      ),
+                                                    Text(
+                                                      fileSize, //file size of the recording as a subtitle in the list widget of the recorder
+                                                      style: Theme.of(context)
+                                                          .textTheme
+                                                          .subtitle2,
+                                                    )
+                                                  ],
+                                                ),
+                                                trailing: PopupMenuButton(
+                                                  shape: RoundedRectangleBorder(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              10)),
+                                                  color: Theme.of(context)
+                                                      .colorScheme
+                                                      .onSecondary,
+
+                                                  //rename share delete buttons inside a popup menu
+                                                  onSelected: (value) {
+                                                    switch (value) {
+                                                      case 'Share':
+                                                        Share.shareFiles(
+                                                            [audioFile.path],
+                                                            text: fileName);
+                                                        break;
+                                                      case 'Rename':
+                                                        rename(audioFile);
+                                                        break;
+                                                      case 'Delete':
+                                                        delete(audioFile);
+                                                        break;
+                                                    }
+                                                  },
+                                                  itemBuilder:
+                                                      (BuildContext context) {
+                                                    //item builder of the popup button
+                                                    return [
+                                                      'Share',
+                                                      'Rename',
+                                                      'Delete'
+                                                    ].map((String choice) {
+                                                      return PopupMenuItem(
+                                                        value: choice,
+                                                        child: Text(
+                                                          choice,
+                                                          style: TextStyle(
+                                                              color: Theme.of(
+                                                                      context)
+                                                                  .colorScheme
+                                                                  .onBackground,
+                                                              fontFamily:
+                                                                  'Raleway',
+                                                              fontSize: 18,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w600),
+                                                        ),
+                                                      );
+                                                    }).toList();
+                                                  },
+                                                ),
+                                                leading: CircleAvatar(
+                                                  //play pause circle avatar for leading icon
+                                                  radius: 35,
+                                                  backgroundColor: Colors.green,
+                                                  child: IconButton(
+                                                    padding: EdgeInsets.zero,
+                                                    onPressed: () async {
+                                                      if ((audioPlayer!
+                                                          .isPlaying)) {
+                                                        pauseAudio();
+                                                        setState(() {});
+                                                      } else {
+                                                        playAudio(
+                                                            audioFile.path,
+                                                            index);
+                                                      }
+                                                    },
+                                                    icon: Icon(
+                                                      isPlaying(index)
+                                                          ? Icons.pause
+                                                          : Icons.play_arrow,
+                                                      color: const Color(
+                                                          0xFFffffff),
+                                                    ),
+                                                    iconSize: 30,
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                    );
+                                  }
+
+                                  return const Center(
+                                    child: CircularProgressIndicator(),
+                                  );
+                                },
+                              )
+                            ],
                           ),
                         ),
-                        child: _mRecorder!.isRecording
-                            ? const Icon(Icons.pause)
-                            : null,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              collapsed: Container(
+                decoration: BoxDecoration(
+                  color: Theme.of(context).colorScheme.onSecondary,
+                  borderRadius: const BorderRadius.only(
+                    topLeft: Radius.circular(24.0),
+                    topRight: Radius.circular(24.0),
+                  ),
+                ),
+                child: Column(
+                  children: [
+                    const BarIndicator(),
+                    Center(
+                      child: Text(
+                        "Swipe Up for more",
+                        style: TextStyle(
+                            color: Theme.of(context).colorScheme.onBackground,
+                            fontFamily: 'Raleway'),
                       ),
                     ),
-                    Visibility(
-                      visible: _mRecorder!.isPaused ? true : false,
-                      maintainSize: true,
-                      maintainAnimation: true,
-                      maintainState: true,
-                      child: SizedBox(
-                        width: 40,
-                        height: 40,
-                        child: IconButton(
-                          onPressed: () => saveAudioBottomSheet(),
-                          icon: const Icon(Icons.check),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: Padding(
+                        padding: const EdgeInsets.only(top: 10.0, bottom: 15.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            FutureBuilder(
+                              //list builder for when sliding up panel is closed
+                              future: getDirectory(),
+                              builder: (BuildContext context,
+                                  AsyncSnapshot<dynamic> snapshot) {
+                                if (snapshot.hasData) {
+                                  Directory dir = snapshot.data;
+                                  List<FileSystemEntity?> audiosFiles = dir
+                                      .listSync(
+                                          recursive: true, followLinks: false)
+                                      .map((file) {
+                                    if (file.statSync().type ==
+                                        FileSystemEntityType.file) {
+                                      return file;
+                                    }
+                                  }).toList();
+
+                                  audiosFiles.removeWhere(
+                                      (element) => element == null);
+
+                                  if (audiosFiles.isEmpty) {
+                                    return Center(
+                                      child: Text(
+                                        'No recordings', // show when there are no recordings saved
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyText1,
+                                      ),
+                                    );
+                                  }
+
+                                  return ListView.builder(
+                                    //for closed sliding up panel
+                                    //list view to display the recordings in a list
+                                    shrinkWrap: true,
+                                    physics:
+                                        const BouncingScrollPhysics(), //bouncing physics
+                                    itemCount: audiosFiles.length,
+                                    itemBuilder:
+                                        (BuildContext context, int index) {
+                                      File audioFile =
+                                          File(audiosFiles[index]!.path);
+
+                                      DateFormat dayFormat = DateFormat.yMd();
+                                      DateFormat timeFormat = DateFormat.Hm();
+                                      String fileSize = getFileSize(
+                                          audioFile.lengthSync(), 1);
+                                      DateTime createdAt =
+                                          audioFile.lastModifiedSync();
+                                      String createdAtFormatted = '';
+                                      String fileName = audioFile.name ??
+                                          'Recording'; //checks if file name starts with recording
+
+                                      if (createdAt.isToday()) {
+                                        createdAtFormatted =
+                                            timeFormat.format(createdAt);
+                                      } else {
+                                        createdAtFormatted =
+                                            dayFormat.format(createdAt);
+                                      }
+
+                                      return Padding(
+                                        padding:
+                                            const EdgeInsets.only(top: 10.0),
+                                        child: Container(
+                                          padding: const EdgeInsets.all(10),
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                const BorderRadius.all(
+                                                    Radius.circular(15)),
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .onTertiary,
+                                          ),
+                                          child: Padding(
+                                            padding: const EdgeInsets.only(
+                                                bottom: 5, top: 5),
+                                            child: ListTile(
+                                              onTap: () {},
+                                              title: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
+                                                children: [
+                                                  Expanded(
+                                                    child: AutoSizeText(
+                                                      fileName, //name of the file formatting inside the list of recordings
+                                                      maxLines: 1,
+                                                      style: Theme.of(context)
+                                                          .textTheme
+                                                          .headline2,
+                                                    ),
+                                                  ),
+                                                  Text(
+                                                    createdAtFormatted,
+                                                    style: Theme.of(context)
+                                                        .textTheme
+                                                        .subtitle2,
+                                                  )
+                                                ],
+                                              ),
+                                              subtitle: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
+                                                children: [
+                                                  if (isPlaying(index))
+                                                    Text(
+                                                      //duration of the recording
+                                                      durationFormat(duration),
+                                                      style: Theme.of(context)
+                                                          .textTheme
+                                                          .subtitle2,
+                                                    ),
+                                                  Text(
+                                                    fileSize, //file size of the recording as a subtitle in the list widget of the recorder
+                                                    style: Theme.of(context)
+                                                        .textTheme
+                                                        .subtitle2,
+                                                  )
+                                                ],
+                                              ),
+                                              trailing: PopupMenuButton(
+                                                shape: RoundedRectangleBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            10)),
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .onSecondary,
+                                                //rename share delete buttons inside a popup menu
+                                                onSelected: (value) {
+                                                  switch (value) {
+                                                    case 'Share':
+                                                      Share.shareFiles(
+                                                          [audioFile.path],
+                                                          text: fileName);
+                                                      break;
+                                                    case 'Rename':
+                                                      rename(audioFile);
+                                                      break;
+                                                    case 'Delete':
+                                                      delete(audioFile);
+                                                      break;
+                                                  }
+                                                },
+                                                itemBuilder:
+                                                    (BuildContext context) {
+                                                  //item builder of the popup button
+                                                  return [
+                                                    'Share',
+                                                    'Rename',
+                                                    'Delete'
+                                                  ].map((String choice) {
+                                                    return PopupMenuItem(
+                                                      value: choice,
+                                                      child: Text(
+                                                        choice,
+                                                        style: TextStyle(
+                                                            color: Theme.of(
+                                                                    context)
+                                                                .colorScheme
+                                                                .onBackground,
+                                                            fontFamily:
+                                                                'Raleway',
+                                                            fontSize: 18,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .w600),
+                                                      ),
+                                                    );
+                                                  }).toList();
+                                                },
+                                              ),
+                                              leading: CircleAvatar(
+                                                //play pause circle avatar for leading icon
+                                                radius: 35,
+                                                backgroundColor: Colors.green,
+                                                child: IconButton(
+                                                  padding: EdgeInsets.zero,
+                                                  onPressed: () async {
+                                                    if ((audioPlayer!
+                                                        .isPlaying)) {
+                                                      pauseAudio();
+                                                      setState(() {});
+                                                    } else {
+                                                      playAudio(audioFile.path,
+                                                          index);
+                                                    }
+                                                  },
+                                                  icon: Icon(
+                                                    isPlaying(index)
+                                                        ? Icons.pause
+                                                        : Icons.play_arrow,
+                                                    color:
+                                                        const Color(0xFFffffff),
+                                                  ),
+                                                  iconSize: 30,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                  );
+                                }
+
+                                return const Center(
+                                  child: CircularProgressIndicator(),
+                                );
+                              },
+                            )
+                          ],
                         ),
                       ),
                     ),
                   ],
                 ),
-              )
-            ],
-          ),
-          SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.only(
-                  left: 24.0, right: 24.0, top: 20.0, bottom: 15.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+              ),
+              body: Column(
                 children: [
-                  FutureBuilder(
-                    future: getDirectory(),
-                    builder: (BuildContext context,
-                        AsyncSnapshot<dynamic> snapshot) {
-                      if (snapshot.hasData) {
-                        Directory dir = snapshot.data;
-                        List<FileSystemEntity?> audiosFiles = dir
-                            .listSync(recursive: true, followLinks: false)
-                            .map((file) {
-                          if (file.statSync().type ==
-                              FileSystemEntityType.file) {
-                            return file;
-                          }
-                        }).toList();
-
-                        audiosFiles.removeWhere((element) => element == null);
-
-                        if (audiosFiles.isEmpty) {
-                          return Center(
-                            child: Text(
-                              'No recordings',
-                              style: Theme.of(context).textTheme.bodyText1,
+                  const SizedBox(
+                      height:
+                          150), // spacing between the recording timer and tab bar
+                  StreamBuilder<int>(
+                    stream: _stopWatchTimer.rawTime,
+                    initialData: 0,
+                    builder: (context, snap) {
+                      final value = snap.data;
+                      final displayTime = StopWatchTimer.getDisplayTime(value!);
+                      return Text(
+                        displayTime,
+                        style: Theme.of(context).textTheme.headline1!.copyWith(
+                              fontSize: 38,
+                              color: Theme.of(context).colorScheme.onBackground,
                             ),
-                          );
-                        }
-
-                        return ListView.builder(
-                          shrinkWrap: true,
-                          physics: const BouncingScrollPhysics(),
-                          itemCount: audiosFiles.length,
-                          itemBuilder: (BuildContext context, int index) {
-                            File audioFile = File(audiosFiles[index]!.path);
-
-                            DateFormat dayFormat = DateFormat.yMd();
-                            DateFormat timeFormat = DateFormat.Hm();
-                            String fileSize =
-                                getFileSize(audioFile.lengthSync(), 1);
-                            DateTime createdAt = audioFile.lastModifiedSync();
-                            String createdAtFormatted = '';
-                            String fileName = audioFile.name ?? 'Recording';
-
-                            if (createdAt.isToday()) {
-                              createdAtFormatted = timeFormat.format(createdAt);
-                            } else {
-                              createdAtFormatted = dayFormat.format(createdAt);
-                            }
-
-                            return Padding(
-                              padding: const EdgeInsets.only(bottom: 5.0),
-                              child: ListTile(
-                                onTap: () {},
-                                title: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Expanded(
-                                      child: AutoSizeText(
-                                        fileName,
-                                        maxLines: 1,
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .headline2,
-                                      ),
-                                    ),
-                                    Text(
-                                      createdAtFormatted,
-                                      style:
-                                          Theme.of(context).textTheme.subtitle2,
-                                    )
-                                  ],
-                                ),
-                                subtitle: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    if (isPlaying(index))
-                                      Text(
-                                        durationFormat(duration),
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .subtitle2,
-                                      ),
-                                    Text(
-                                      fileSize,
-                                      style:
-                                          Theme.of(context).textTheme.subtitle2,
-                                    )
-                                  ],
-                                ),
-                                trailing: PopupMenuButton(
-                                  onSelected: (value) {
-                                    switch (value) {
-                                      case 'Share':
-                                        Share.shareFiles([audioFile.path],
-                                            text: fileName);
-                                        break;
-                                      case 'Rename':
-                                        rename(audioFile);
-                                        break;
-                                      case 'Delete':
-                                        delete(audioFile);
-                                        break;
-                                    }
-                                  },
-                                  itemBuilder: (BuildContext context) {
-                                    return ['Share', 'Rename', 'Delete']
-                                        .map((String choice) {
-                                      return PopupMenuItem(
-                                        value: choice,
-                                        child: Text(choice),
-                                      );
-                                    }).toList();
-                                  },
-                                ),
-                                leading: CircleAvatar(
-                                  radius: 35,
-                                  backgroundColor: const Color(0xFFEFEFEF),
-                                  child: IconButton(
-                                    padding: EdgeInsets.zero,
-                                    onPressed: () async {
-                                      if ((audioPlayer!.isPlaying)) {
-                                        pauseAudio();
-                                        setState(() {});
-                                      } else {
-                                        playAudio(audioFile.path, index);
-                                      }
-                                    },
-                                    icon: Icon(
-                                      isPlaying(index)
-                                          ? Icons.pause
-                                          : Icons.play_arrow,
-                                      color: const Color(0xFF323232),
-                                    ),
-                                    iconSize: 30,
-                                  ),
-                                ),
-                              ),
-                            );
-                          },
-                        );
-                      }
-
-                      return const Center(
-                        child: CircularProgressIndicator(),
                       );
                     },
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 40.0),
+                    child: Text(
+                      'High Quality', //Text below the timer in record tab
+                      style: Theme.of(context).textTheme.subtitle1,
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 50,
+                  ), // TODO space between countdown and animation
+                  //auto spacing for the upcoming record button
+                  Padding(
+                    //record button starts
+                    padding: const EdgeInsets.only(
+                        bottom: 24.0, left: 24.0, right: 24.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Visibility(
+                          visible: _mRecorder!.isPaused ? true : false,
+                          maintainSize: true,
+                          maintainAnimation: true,
+                          maintainState: true,
+                          child: IconButton(
+                            onPressed: () => cancelRecord(),
+                            icon: Icon(
+                              Icons.close,
+                              color: Theme.of(context).colorScheme.onBackground,
+                            ), //x button to cancel the recording to be saved
+                          ),
+                        ),
+                        SizedBox(
+                          width: 76,
+                          height: 76,
+                          child: CircleAvatar(
+                            radius: 50,
+                            backgroundColor: Color(_mRecorder!.isRecording
+                                ? 0xfffc0202
+                                : 0xff4caf50),
+                            child: IconButton(
+                              padding: EdgeInsets.zero,
+                              onPressed: getRecorderFn(),
+                              icon: Icon(
+                                _mRecorder!.isRecording
+                                    ? Icons.pause
+                                    : Icons.fiber_manual_record,
+                                color: const Color(0xFFffffff),
+                              ),
+                              iconSize: 30,
+                            ),
+                          ),
+                        ),
+                        Visibility(
+                          visible: _mRecorder!.isPaused ? true : false,
+                          maintainSize: true,
+                          maintainAnimation: true,
+                          maintainState: true,
+                          child: SizedBox(
+                            width: 40,
+                            height: 40,
+                            child: IconButton(
+                              onPressed: () => saveAudioBottomSheet(),
+                              icon: Icon(
+                                Icons.check,
+                                color:
+                                    Theme.of(context).colorScheme.onBackground,
+                              ), //tick button to proceed to save the recording to storage
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   )
                 ],
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
-      bottomNavigationBar: audioPlayer!.isPlaying ? const MiniPlayer() : null,
     );
   }
 }

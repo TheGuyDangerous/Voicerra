@@ -6,7 +6,7 @@ final _lightColors = [
   const Color(0xffd2f2cd),
   const Color(0xffcdd2f2),
   const Color(0xffcdd2f2),
-  Colors.tealAccent.shade100
+  Colors.tealAccent.shade100,
 ];
 
 class NoteCardWidget extends StatelessWidget {
