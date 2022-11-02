@@ -210,27 +210,28 @@ class _RecPageState extends State<RecPage>
           return SlidingSheetDialog(
             elevation: 8,
             cornerRadius: 15,
-            color: const Color(0xFF212025),
+            color: Theme.of(context).colorScheme.onSecondary,
             builder: (context, state) {
               return Material(
                 child: StatefulBuilder(
                   builder: (BuildContext context,
                       void Function(void Function()) setState) {
                     return Container(
-                      color: const Color(0xFF212025),
+                      color: Theme.of(context).colorScheme.onSecondary,
                       padding: const EdgeInsets.only(
                           left: 24, right: 24, top: 30, bottom: 30),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Padding(
-                            padding: EdgeInsets.only(bottom: 12.0),
+                          Padding(
+                            padding: const EdgeInsets.only(bottom: 12.0),
                             child: Text(
                               'Save Recording', //record bottom sheet title
                               style: TextStyle(
                                 fontFamily: 'Raleway',
                                 fontSize: 20.0,
-                                color: Color(0xa3ffffff),
+                                color:
+                                    Theme.of(context).colorScheme.onBackground,
                                 fontWeight: FontWeight.w500,
                               ),
                             ),
@@ -267,7 +268,7 @@ class _RecPageState extends State<RecPage>
             footerBuilder: (context, state) {
               //SAVE OR CANCEL BOTTOM SHEET BUTTONS
               return Container(
-                color: const Color(0xFF212025),
+                color: Theme.of(context).colorScheme.onSecondary,
                 child: Padding(
                   padding: const EdgeInsets.only(
                       left: 24.0, right: 24.0, bottom: 24.0),
@@ -281,18 +282,20 @@ class _RecPageState extends State<RecPage>
                             child: ElevatedButton(
                               onPressed: () => Navigator.pop(context),
                               style: ElevatedButton.styleFrom(
-                                backgroundColor: const Color(0xFF2f2554),
+                                backgroundColor: const Color(0xff006a53),
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(10),
                                   side: BorderSide.none,
                                 ),
                               ),
-                              child: const Text(
+                              child: Text(
                                 'Cancel', //cancel button of record bottom sheet
                                 style: TextStyle(
                                   fontFamily: 'Raleway',
                                   fontSize: 16.0,
-                                  color: Colors.white,
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .onBackground,
                                   fontWeight: FontWeight.w500,
                                 ),
                               ),
@@ -380,7 +383,7 @@ class _RecPageState extends State<RecPage>
                   builder: (BuildContext context,
                       void Function(void Function()) setState) {
                     return Container(
-                      color: const Color(0xFF212025),
+                      color: Theme.of(context).colorScheme.onSecondary,
                       padding: const EdgeInsets.only(
                           left: 24, right: 24, top: 30, bottom: 30),
                       child: Column(
@@ -426,7 +429,7 @@ class _RecPageState extends State<RecPage>
             footerBuilder: (context, state) {
               return Container(
                 //bottom Save or Cancel buttons of record bottom sheet
-                color: const Color(0xFF212025),
+                color: Theme.of(context).colorScheme.onSecondary,
                 child: Padding(
                   padding: const EdgeInsets.only(
                       left: 24.0, right: 24.0, bottom: 24.0),
@@ -534,14 +537,17 @@ class _RecPageState extends State<RecPage>
           return AlertDialog(
             //popup dialogue fo delete option
             elevation: 8,
-            backgroundColor: const Color(0xFF212025),
+            backgroundColor: Theme.of(context).colorScheme.onTertiary,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(15),
             ),
-            title: const Text(
-              'Are you sure you want to delete this audio?',
-              style: TextStyle(
-                fontFamily: 'Raleway',
+            title: Center(
+              child: const Text(
+                'Are you sure bro ?',
+                style: TextStyle(
+                  fontFamily: 'Raleway',
+                  color: Colors.white,
+                ),
               ),
             ),
             actions: [
@@ -612,7 +618,7 @@ class _RecPageState extends State<RecPage>
     final panelHeightOpen = MediaQuery.of(context).size.height * 0.7;
     return Scaffold(
       //scaffold of the recording page
-      backgroundColor: const Color(0xff1c1c1e),
+      backgroundColor: Theme.of(context).colorScheme.surface,
       body: SafeArea(
         child: Stack(
           children: [
@@ -628,7 +634,7 @@ class _RecPageState extends State<RecPage>
                         'Recorder',
                         style: GoogleFonts.bebasNeue(
                           fontSize: 52,
-                          color: Colors.white,
+                          color: Theme.of(context).colorScheme.onBackground,
                         ),
                       ),
                     ),
@@ -640,7 +646,7 @@ class _RecPageState extends State<RecPage>
                     decoration: BoxDecoration(
                       border: Border.all(color: const Color(0x28ffffff)),
                       borderRadius: BorderRadius.circular(16),
-                      color: const Color(0xff272727),
+                      color: Theme.of(context).colorScheme.onSecondary,
                     ),
                     child: Container(
                         child: _mRecorder!.isRecording
@@ -652,9 +658,10 @@ class _RecPageState extends State<RecPage>
                                   Color(0xFFFF0005),
                                 ],
                               )
-                            : const Icon(
+                            : Icon(
                                 FluentIcons.record_12_regular,
-                                color: Color(0xa1ffffff),
+                                color:
+                                    Theme.of(context).colorScheme.onBackground,
                                 size: 36,
                               )),
                   ),
@@ -668,11 +675,11 @@ class _RecPageState extends State<RecPage>
               parallaxEnabled: true,
               color: Colors.transparent,
               panel: Container(
-                decoration: const BoxDecoration(
+                decoration: BoxDecoration(
                   // background color of panel
-                  color: Color(0xFF212025),
+                  color: Theme.of(context).colorScheme.onSecondary,
                   // rounded corners of panel
-                  borderRadius: BorderRadius.only(
+                  borderRadius: const BorderRadius.only(
                     topLeft: Radius.circular(24.0),
                     topRight: Radius.circular(24.0),
                   ),
@@ -683,12 +690,12 @@ class _RecPageState extends State<RecPage>
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       const BarIndicator(),
-                      const Text(
+                      Text(
                         'Recordings',
                         style: TextStyle(
                           fontSize: 24.0,
                           fontFamily: 'Raleway',
-                          color: Color(0xa3ffffff),
+                          color: Theme.of(context).colorScheme.onBackground,
                           fontWeight: FontWeight.w400,
                         ),
                       ),
@@ -768,10 +775,13 @@ class _RecPageState extends State<RecPage>
                                               const EdgeInsets.only(top: 10.0),
                                           child: Container(
                                             padding: const EdgeInsets.all(10),
-                                            decoration: const BoxDecoration(
-                                              borderRadius: BorderRadius.all(
-                                                  Radius.circular(15)),
-                                              color: Color(0x94181818),
+                                            decoration: BoxDecoration(
+                                              borderRadius:
+                                                  const BorderRadius.all(
+                                                      Radius.circular(15)),
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .onTertiary,
                                             ),
                                             child: Padding(
                                               padding: const EdgeInsets.only(
@@ -784,7 +794,7 @@ class _RecPageState extends State<RecPage>
                                                           .spaceBetween,
                                                   children: [
                                                     Expanded(
-                                                      child: AutoSizeText(
+                                                      child: Text(
                                                         fileName, //name of the file formatting inside the list of recordings
                                                         maxLines: 1,
                                                         style: Theme.of(context)
@@ -823,6 +833,14 @@ class _RecPageState extends State<RecPage>
                                                   ],
                                                 ),
                                                 trailing: PopupMenuButton(
+                                                  shape: RoundedRectangleBorder(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              10)),
+                                                  color: Theme.of(context)
+                                                      .colorScheme
+                                                      .onSecondary,
+
                                                   //rename share delete buttons inside a popup menu
                                                   onSelected: (value) {
                                                     switch (value) {
@@ -849,7 +867,20 @@ class _RecPageState extends State<RecPage>
                                                     ].map((String choice) {
                                                       return PopupMenuItem(
                                                         value: choice,
-                                                        child: Text(choice),
+                                                        child: Text(
+                                                          choice,
+                                                          style: TextStyle(
+                                                              color: Theme.of(
+                                                                      context)
+                                                                  .colorScheme
+                                                                  .onBackground,
+                                                              fontFamily:
+                                                                  'Raleway',
+                                                              fontSize: 18,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w600),
+                                                        ),
                                                       );
                                                     }).toList();
                                                   },
@@ -857,8 +888,7 @@ class _RecPageState extends State<RecPage>
                                                 leading: CircleAvatar(
                                                   //play pause circle avatar for leading icon
                                                   radius: 35,
-                                                  backgroundColor:
-                                                      const Color(0xffcabde4),
+                                                  backgroundColor: Colors.green,
                                                   child: IconButton(
                                                     padding: EdgeInsets.zero,
                                                     onPressed: () async {
@@ -877,7 +907,7 @@ class _RecPageState extends State<RecPage>
                                                           ? Icons.pause
                                                           : Icons.play_arrow,
                                                       color: const Color(
-                                                          0xFF323232),
+                                                          0xFFffffff),
                                                     ),
                                                     iconSize: 30,
                                                   ),
@@ -904,9 +934,9 @@ class _RecPageState extends State<RecPage>
                 ),
               ),
               collapsed: Container(
-                decoration: const BoxDecoration(
-                  color: Color(0xFF212025),
-                  borderRadius: BorderRadius.only(
+                decoration: BoxDecoration(
+                  color: Theme.of(context).colorScheme.onSecondary,
+                  borderRadius: const BorderRadius.only(
                     topLeft: Radius.circular(24.0),
                     topRight: Radius.circular(24.0),
                   ),
@@ -914,11 +944,12 @@ class _RecPageState extends State<RecPage>
                 child: Column(
                   children: [
                     const BarIndicator(),
-                    const Center(
+                    Center(
                       child: Text(
                         "Swipe Up for more",
                         style: TextStyle(
-                            color: Color(0xa3ffffff), fontFamily: 'Raleway'),
+                            color: Theme.of(context).colorScheme.onBackground,
+                            fontFamily: 'Raleway'),
                       ),
                     ),
                     const SizedBox(
@@ -997,10 +1028,13 @@ class _RecPageState extends State<RecPage>
                                             const EdgeInsets.only(top: 10.0),
                                         child: Container(
                                           padding: const EdgeInsets.all(10),
-                                          decoration: const BoxDecoration(
-                                            borderRadius: BorderRadius.all(
-                                                Radius.circular(15)),
-                                            color: Color(0x94181818),
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                const BorderRadius.all(
+                                                    Radius.circular(15)),
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .onTertiary,
                                           ),
                                           child: Padding(
                                             padding: const EdgeInsets.only(
@@ -1051,7 +1085,13 @@ class _RecPageState extends State<RecPage>
                                                 ],
                                               ),
                                               trailing: PopupMenuButton(
-                                                color: Colors.white,
+                                                shape: RoundedRectangleBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            10)),
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .onSecondary,
                                                 //rename share delete buttons inside a popup menu
                                                 onSelected: (value) {
                                                   switch (value) {
@@ -1078,7 +1118,20 @@ class _RecPageState extends State<RecPage>
                                                   ].map((String choice) {
                                                     return PopupMenuItem(
                                                       value: choice,
-                                                      child: Text(choice),
+                                                      child: Text(
+                                                        choice,
+                                                        style: TextStyle(
+                                                            color: Theme.of(
+                                                                    context)
+                                                                .colorScheme
+                                                                .onBackground,
+                                                            fontFamily:
+                                                                'Raleway',
+                                                            fontSize: 18,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .w600),
+                                                      ),
                                                     );
                                                   }).toList();
                                                 },
@@ -1086,8 +1139,7 @@ class _RecPageState extends State<RecPage>
                                               leading: CircleAvatar(
                                                 //play pause circle avatar for leading icon
                                                 radius: 35,
-                                                backgroundColor:
-                                                    const Color(0xffcabde4),
+                                                backgroundColor: Colors.green,
                                                 child: IconButton(
                                                   padding: EdgeInsets.zero,
                                                   onPressed: () async {
@@ -1105,7 +1157,7 @@ class _RecPageState extends State<RecPage>
                                                         ? Icons.pause
                                                         : Icons.play_arrow,
                                                     color:
-                                                        const Color(0xFF323232),
+                                                        const Color(0xFFffffff),
                                                   ),
                                                   iconSize: 30,
                                                 ),
@@ -1145,7 +1197,7 @@ class _RecPageState extends State<RecPage>
                         displayTime,
                         style: Theme.of(context).textTheme.headline1!.copyWith(
                               fontSize: 38,
-                              color: const Color(0xa3ffffff),
+                              color: Theme.of(context).colorScheme.onBackground,
                             ),
                       );
                     },
@@ -1175,9 +1227,9 @@ class _RecPageState extends State<RecPage>
                           maintainState: true,
                           child: IconButton(
                             onPressed: () => cancelRecord(),
-                            icon: const Icon(
+                            icon: Icon(
                               Icons.close,
-                              color: Color(0xa3ffffff),
+                              color: Theme.of(context).colorScheme.onBackground,
                             ), //x button to cancel the recording to be saved
                           ),
                         ),
@@ -1186,15 +1238,17 @@ class _RecPageState extends State<RecPage>
                           height: 76,
                           child: CircleAvatar(
                             radius: 50,
-                            backgroundColor: const Color(0xd7cabde4),
+                            backgroundColor: Color(_mRecorder!.isRecording
+                                ? 0xfffc0202
+                                : 0xff4caf50),
                             child: IconButton(
                               padding: EdgeInsets.zero,
                               onPressed: getRecorderFn(),
                               icon: Icon(
                                 _mRecorder!.isRecording
                                     ? Icons.pause
-                                    : FluentIcons.mic_16_filled,
-                                color: const Color(0xFF323232),
+                                    : Icons.fiber_manual_record,
+                                color: const Color(0xFFffffff),
                               ),
                               iconSize: 30,
                             ),
@@ -1210,9 +1264,10 @@ class _RecPageState extends State<RecPage>
                             height: 40,
                             child: IconButton(
                               onPressed: () => saveAudioBottomSheet(),
-                              icon: const Icon(
+                              icon: Icon(
                                 Icons.check,
-                                color: Color(0xa3ffffff),
+                                color:
+                                    Theme.of(context).colorScheme.onBackground,
                               ), //tick button to proceed to save the recording to storage
                             ),
                           ),

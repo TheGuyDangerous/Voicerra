@@ -38,9 +38,9 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
 
   @override
   Widget build(BuildContext context) => Scaffold(
-        backgroundColor: const Color(0xff000000),
+        backgroundColor: Theme.of(context).colorScheme.shadow,
         appBar: AppBar(
-          backgroundColor: const Color(0xFF000000),
+          backgroundColor: Theme.of(context).colorScheme.shadow,
           centerTitle: true,
           actions: [editButton(), deleteButton()],
         ),
@@ -70,8 +70,9 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
                       const SizedBox(height: 28),
                       Text(
                         note.description,
-                        style: const TextStyle(
-                            color: Color(0xffffffff), fontSize: 20),
+                        style: TextStyle(
+                            color: Theme.of(context).colorScheme.onBackground,
+                            fontSize: 20),
                       )
                     ],
                   ),

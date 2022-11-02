@@ -15,6 +15,10 @@ import 'package:clipboard/clipboard.dart';
 
 class TranscribePage extends StatefulWidget {
   final String title;
+  final longString = '''
+Online 
+Transcriber
+''';
 
   const TranscribePage({super.key, required this.title});
 
@@ -84,12 +88,13 @@ class _TranscribePageState extends State<TranscribePage> {
     final panelHeightClosed = MediaQuery.of(context).size.height * 0.3;
     final panelHeightOpen = MediaQuery.of(context).size.height * 0.7;
     return Scaffold(
-      backgroundColor: const Color(0xff1c1c1e),
+      backgroundColor: Theme.of(context).colorScheme.surface,
       body: SafeArea(
         child: Stack(
           children: [
             MyAppBar(
-              title: 'Online Transcriber',
+              title: "Online\n"
+                  "Transcriber",
               onIconTap: _copy,
               iconName: Iconsax.copy,
             ),
@@ -100,11 +105,11 @@ class _TranscribePageState extends State<TranscribePage> {
               parallaxEnabled: true,
               color: Colors.transparent,
               panel: Container(
-                decoration: const BoxDecoration(
+                decoration: BoxDecoration(
                   // background color of panel
-                  color: Color(0xFF212025),
+                  color: Theme.of(context).colorScheme.onSecondary,
                   // rounded corners of panel
-                  borderRadius: BorderRadius.only(
+                  borderRadius: const BorderRadius.only(
                     topLeft: Radius.circular(24.0),
                     topRight: Radius.circular(24.0),
                   ),
@@ -113,12 +118,12 @@ class _TranscribePageState extends State<TranscribePage> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     const BarIndicator(),
-                    const Text(
+                    Text(
                       'Transcribed Text',
                       style: TextStyle(
                         fontSize: 24.0,
                         fontFamily: 'Raleway',
-                        color: Color(0xa3ffffff),
+                        color: Theme.of(context).colorScheme.onBackground,
                         fontWeight: FontWeight.w400,
                       ),
                     ),
@@ -130,10 +135,10 @@ class _TranscribePageState extends State<TranscribePage> {
                       child: Text(
                         content,
                         textAlign: TextAlign.center,
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontFamily: 'Raleway',
                           fontSize: 24.0,
-                          color: Color(0xd8ffffff),
+                          color: Theme.of(context).colorScheme.onBackground,
                           fontWeight: FontWeight.w400,
                         ),
                       ),
@@ -142,9 +147,9 @@ class _TranscribePageState extends State<TranscribePage> {
                 ),
               ),
               collapsed: Container(
-                decoration: const BoxDecoration(
-                  color: Color(0xFF212025),
-                  borderRadius: BorderRadius.only(
+                decoration: BoxDecoration(
+                  color: Theme.of(context).colorScheme.onSecondary,
+                  borderRadius: const BorderRadius.only(
                     topLeft: Radius.circular(24.0),
                     topRight: Radius.circular(24.0),
                   ),
@@ -152,11 +157,12 @@ class _TranscribePageState extends State<TranscribePage> {
                 child: Column(
                   children: [
                     const BarIndicator(),
-                    const Center(
+                    Center(
                       child: Text(
                         "Swipe Up for more",
                         style: TextStyle(
-                            color: Color(0xa3ffffff), fontFamily: 'Raleway'),
+                            color: Theme.of(context).colorScheme.onBackground,
+                            fontFamily: 'Raleway'),
                       ),
                     ),
                     const SizedBox(
@@ -167,10 +173,10 @@ class _TranscribePageState extends State<TranscribePage> {
                       child: Text(
                         content,
                         textAlign: TextAlign.center,
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontFamily: 'Raleway',
                           fontSize: 24.0,
-                          color: Color(0xd8ffffff),
+                          color: Theme.of(context).colorScheme.onBackground,
                           fontWeight: FontWeight.w400,
                         ),
                       ),
@@ -214,16 +220,18 @@ class _TranscribePageState extends State<TranscribePage> {
                                   child: Padding(
                                     padding: const EdgeInsets.all(15),
                                     child: Row(
-                                      children: const [
-                                        SizedBox(
+                                      children: [
+                                        const SizedBox(
                                           width: 35.0,
                                         ),
                                         Icon(
                                           Iconsax.folder,
                                           size: 30,
-                                          color: Color(0xFF2D50A8),
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .onBackground,
                                         ),
-                                        SizedBox(
+                                        const SizedBox(
                                           width: 25.0,
                                         ),
                                         Center(
@@ -233,7 +241,9 @@ class _TranscribePageState extends State<TranscribePage> {
                                             style: TextStyle(
                                               fontFamily: 'Raleway',
                                               fontWeight: FontWeight.bold,
-                                              color: Color(0xFF2D50A8),
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .onBackground,
                                               fontSize: 17.0,
                                               letterSpacing: 2,
                                             ),

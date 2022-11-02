@@ -623,6 +623,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.0.0+1"
+  sound_stream:
+    dependency: "direct main"
+    description:
+      name: sound_stream
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.3.0"
   source_span:
     dependency: transitive
     description:
@@ -826,6 +833,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.2.0"
+  web_socket_channel:
+    dependency: "direct main"
+    description:
+      name: web_socket_channel
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.2.0"
   win32:
     dependency: transitive
     description:

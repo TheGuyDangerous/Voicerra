@@ -75,7 +75,7 @@ class _NotesPageState extends State<NotesPage> {
 
   @override
   Widget build(BuildContext context) => Scaffold(
-        backgroundColor: const Color(0xFF212025),
+        backgroundColor: Theme.of(context).colorScheme.onSecondary,
         body: Stack(
           children: [
             SingleChildScrollView(
@@ -92,13 +92,15 @@ class _NotesPageState extends State<NotesPage> {
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               mainAxisSize: MainAxisSize.min,
-                              children: const [
+                              children: [
                                 Icon(
                                   Iconsax.note_1,
-                                  color: Color(0x67ffffff),
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .secondaryContainer,
                                   size: 120,
                                 ),
-                                SizedBox(
+                                const SizedBox(
                                   height: 20,
                                 ),
                                 Text(
@@ -106,7 +108,9 @@ class _NotesPageState extends State<NotesPage> {
                                   style: TextStyle(
                                       fontWeight: FontWeight.w300,
                                       fontSize: 22,
-                                      color: Color(0x67ffffff)),
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .secondaryContainer),
                                 ),
                               ],
                             ),

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:voicerra/Screens/about_page.dart';
+import 'package:voicerra/Screens/continuous.dart';
 import 'package:voicerra/Screens/translate.dart';
-import 'package:voicerra/Screens/voice_beta.dart';
 import 'package:voicerra/widget/BarIndicator.dart';
 import 'package:voicerra/widget/customappbar.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
@@ -36,7 +36,7 @@ class _VoiceAppState extends State<VoiceApp> {
     final panelHeightClosed = MediaQuery.of(context).size.height * 0.3;
     final panelHeightOpen = MediaQuery.of(context).size.height * 0.7;
     return Scaffold(
-      backgroundColor: const Color(0xff1c1c1e),
+      backgroundColor: Theme.of(context).colorScheme.surface,
       body: SafeArea(
         child: Stack(
           children: [
@@ -52,11 +52,11 @@ class _VoiceAppState extends State<VoiceApp> {
               parallaxEnabled: true,
               color: Colors.transparent,
               panel: Container(
-                decoration: const BoxDecoration(
+                decoration: BoxDecoration(
                   // background color of panel
-                  color: Color(0xFF212025),
+                  color: Theme.of(context).colorScheme.onSecondary,
                   // rounded corners of panel
-                  borderRadius: BorderRadius.only(
+                  borderRadius: const BorderRadius.only(
                     topLeft: Radius.circular(24.0),
                     topRight: Radius.circular(24.0),
                   ),
@@ -78,12 +78,14 @@ class _VoiceAppState extends State<VoiceApp> {
                                 SizedBox(
                                   width: MediaQuery.of(context).size.width / 4,
                                 ),
-                                const Text(
+                                Text(
                                   'Transcribed Text',
                                   style: TextStyle(
                                     fontSize: 24.0,
                                     fontFamily: 'Raleway',
-                                    color: Color(0xa3ffffff),
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .onBackground,
                                     fontWeight: FontWeight.w400,
                                   ),
                                 ),
@@ -121,10 +123,10 @@ class _VoiceAppState extends State<VoiceApp> {
                           child: SelectableText(
                             textAlign: TextAlign.center,
                             _text,
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontFamily: 'Raleway',
                               fontSize: 24.0,
-                              color: Color(0xd8ffffff),
+                              color: Theme.of(context).colorScheme.onBackground,
                               fontWeight: FontWeight.w400,
                             ),
                           ),
@@ -135,9 +137,9 @@ class _VoiceAppState extends State<VoiceApp> {
                 ),
               ),
               collapsed: Container(
-                decoration: const BoxDecoration(
-                  color: Color(0xFF212025),
-                  borderRadius: BorderRadius.only(
+                decoration: BoxDecoration(
+                  color: Theme.of(context).colorScheme.onSecondary,
+                  borderRadius: const BorderRadius.only(
                     topLeft: Radius.circular(24.0),
                     topRight: Radius.circular(24.0),
                   ),
@@ -145,11 +147,12 @@ class _VoiceAppState extends State<VoiceApp> {
                 child: Column(
                   children: [
                     const BarIndicator(),
-                    const Center(
+                    Center(
                       child: Text(
                         "Swipe Up for more",
                         style: TextStyle(
-                            color: Color(0xa3ffffff), fontFamily: 'Raleway'),
+                            color: Theme.of(context).colorScheme.onBackground,
+                            fontFamily: 'Raleway'),
                       ),
                     ),
                     const SizedBox(
@@ -164,10 +167,10 @@ class _VoiceAppState extends State<VoiceApp> {
                         child: SelectableText(
                           textAlign: TextAlign.center,
                           _text,
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontFamily: 'Raleway',
                             fontSize: 24.0,
-                            color: Color(0xd8ffffff),
+                            color: Theme.of(context).colorScheme.onBackground,
                             fontWeight: FontWeight.w400,
                           ),
                         ),
@@ -187,21 +190,33 @@ class _VoiceAppState extends State<VoiceApp> {
                       shrinkWrap: true,
                       physics: const BouncingScrollPhysics(),
                       scrollDirection: Axis.horizontal,
-                      children: const [
+                      children: [
                         OptionsCard(
-                          cardTitle: 'Try Beta',
+                          cardTitle: 'Nonstop Mode',
                           iconName: Iconsax.microphone,
-                          pageName: BetaVoice(),
+                          pageName: const ContinuousVoiceApp(),
+                          iconColor: const Color(0xff006a53),
+                          darkGradientColor: const Color(0xffd1ffeb),
+                          titleColor: const Color(0xff006a53),
+                          lightGradientColor: const Color(0xffd1ffeb),
                         ),
                         OptionsCard(
                           cardTitle: 'Translate',
                           iconName: Icons.translate,
-                          pageName: TranslatePage(),
+                          pageName: const TranslatePage(),
+                          iconColor: const Color(0xff006a53),
+                          darkGradientColor: const Color(0xffd1ffeb),
+                          titleColor: const Color(0xff006a53),
+                          lightGradientColor: const Color(0xffd1ffeb),
                         ),
                         OptionsCard(
-                          cardTitle: 'About',
+                          cardTitle: 'Settings',
                           iconName: Icons.person_outline_sharp,
-                          pageName: AboutPage(),
+                          pageName: const AboutPage(),
+                          iconColor: const Color(0xff006a53),
+                          darkGradientColor: const Color(0xffd1ffeb),
+                          titleColor: const Color(0xff006a53),
+                          lightGradientColor: const Color(0xffd1ffeb),
                         ),
                       ],
                     ),

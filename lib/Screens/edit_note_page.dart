@@ -34,10 +34,10 @@ class _AddEditNotePageState extends State<AddEditNotePage> {
 
   @override
   Widget build(BuildContext context) => Scaffold(
-        backgroundColor: const Color(0xff000000),
+        backgroundColor: Theme.of(context).colorScheme.shadow,
         appBar: AppBar(
           toolbarHeight: 75,
-          backgroundColor: const Color(0xff000000),
+          backgroundColor: Theme.of(context).colorScheme.shadow,
           actions: [buildButton()],
         ),
         body: Form(
@@ -67,14 +67,15 @@ class _AddEditNotePageState extends State<AddEditNotePage> {
         child: Container(
           padding: const EdgeInsets.all(12),
           decoration: BoxDecoration(
-            border: Border.all(color: const Color(0x28ffffff)),
+            border: Border.all(
+                color: Theme.of(context).colorScheme.onInverseSurface),
             borderRadius: BorderRadius.circular(16),
-            color: const Color(0xff272727),
+            color: Theme.of(context).colorScheme.onInverseSurface,
           ),
-          child: const Icon(
+          child: Icon(
             Iconsax.book_saved,
             size: 36,
-            color: Color(0xa1ffffff),
+            color: Theme.of(context).colorScheme.onBackground.withOpacity(0.5),
           ),
         ),
       ),

@@ -28,8 +28,8 @@ class MyAppBar extends StatelessWidget {
               child: Text(
                 title,
                 style: GoogleFonts.bebasNeue(
-                  fontSize: 52,
-                  color: Colors.white,
+                  fontSize: 42,
+                  color: Theme.of(context).colorScheme.onBackground,
                 ),
               ),
             ),
@@ -41,12 +41,12 @@ class MyAppBar extends StatelessWidget {
               decoration: BoxDecoration(
                 border: Border.all(color: const Color(0x28ffffff)),
                 borderRadius: BorderRadius.circular(16),
-                color: const Color(0xff272727),
+                color: Theme.of(context).colorScheme.onSecondary,
               ),
               child: Icon(
                 iconName,
                 size: 36,
-                color: const Color(0xa1ffffff),
+                color: Theme.of(context).colorScheme.onBackground,
               ),
             ),
           ),

@@ -25,8 +25,8 @@ class Glass extends StatelessWidget {
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
           colors: [
-            const Color(0xFFffffff).withOpacity(0.05),
-            const Color(0xFFFFFFFF).withOpacity(0.05),
+            Theme.of(context).colorScheme.onBackground.withOpacity(0.05),
+            Theme.of(context).colorScheme.onBackground.withOpacity(0.05),
           ],
           stops: const [
             0.1,
@@ -36,8 +36,8 @@ class Glass extends StatelessWidget {
         begin: Alignment.topLeft,
         end: Alignment.bottomRight,
         colors: [
-          const Color(0xFFffffff).withOpacity(0.05),
-          const Color((0xFFFFFFFF)).withOpacity(0.05),
+          Theme.of(context).colorScheme.onBackground.withOpacity(0.05),
+          Theme.of(context).colorScheme.onBackground.withOpacity(0.05),
         ],
       ),
       child: Center(
@@ -61,7 +61,7 @@ class Glass extends StatelessWidget {
                   style: GoogleFonts.bebasNeue(
                     fontSize: 34,
                     fontWeight: FontWeight.w400,
-                    color: const Color(0xb5ffffff),
+                    color: Theme.of(context).colorScheme.onBackground,
                   ),
                 ),
         ),
