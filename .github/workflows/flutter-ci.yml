@@ -40,7 +40,7 @@ jobs:
     - run: flutter format --set-exit-if-changed .
     
     # Build apk.
-    - run: flutter build apk --split-per-abi --no-sound-null-safety
+    - run: flutter build apk
     - name: Push to Releases
       uses: ncipollo/release-action@v1
       with:
