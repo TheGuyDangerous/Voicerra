@@ -40,10 +40,10 @@ jobs:
     - run: flutter format --set-exit-if-changed .
     
     # Build apk.
-    - run: flutter build apk
+    - run: flutter build apk --split-per-abi --no-sound-null-safety
     - name: Push to Releases
       uses: ncipollo/release-action@v1
       with:
         artifacts: "build/app/outputs/apk/release/app-release.apk"
-        tag: v4.0.${{github.run_number}}
+        tag: v5.0.${{github.run_number}}
         token: ${{secrets.TOKEN}}
