@@ -626,9 +626,9 @@ packages:
   sound_stream:
     dependency: "direct main"
     description:
-      name: sound_stream
-      url: "https://pub.dartlang.org"
-    source: hosted
+      path: "packages/sound_stream"
+      relative: true
+    source: path
     version: "0.3.0"
   source_span:
     dependency: transitive

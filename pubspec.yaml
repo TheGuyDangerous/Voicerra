@@ -47,7 +47,8 @@ dependencies:
   glassmorphism: ^3.0.0
   fluentui_system_icons: ^1.1.184
   web_socket_channel: ^2.2.0
-  sound_stream: ^0.3.0
+  sound_stream:
+    path: ./packages/sound_stream
 
 dev_dependencies:
   flutter_lints: ^2.0.1
