@@ -32,6 +32,8 @@ class _ContinuousVoiceAppState extends State<ContinuousVoiceApp> {
 
   late IOWebSocketChannel channel;
 
+  bool _isServiceActive = false;
+
   @override
   void initState() {
     super.initState();
@@ -236,32 +238,25 @@ class _ContinuousVoiceAppState extends State<ContinuousVoiceApp> {
                     //record button starts
                     padding: const EdgeInsets.only(
                         bottom: 24.0, left: 24.0, right: 24.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        FloatingActionButton(
-                          onPressed: () {
-                            updateText('');
-
-                            _startRecord();
-                          },
-                          backgroundColor: Colors.green,
-                          child: const Icon(
-                            Icons.mic,
-                            color: Colors.white,
-                          ),
-                        ),
-                        const SizedBox(
-                          width: 76,
-                          height: 76,
-                        ),
-                        FloatingActionButton(
-                          heroTag: "btn2",
-                          backgroundColor: Colors.redAccent,
-                          onPressed: () => _stopRecord(),
-                          child: const Icon(Icons.stop, color: Colors.white),
-                        ),
-                      ],
+                    child: ElevatedButton(
+                      onPressed: () {
+                        if (_isServiceActive) {
+                          _stopRecord();
+                          _isServiceActive = false;
+                        } else {
+                          updateText('');
+                          _isServiceActive = true;
+                          _startRecord();
+                        }
+                      },
+                      child: Icon(_isServiceActive ? Icons.stop : Icons.mic,size: 40,),
+                      style: ElevatedButton.styleFrom(
+                        shape: CircleBorder(),
+                        padding: EdgeInsets.all(15),
+                        backgroundColor: _isServiceActive
+                            ? Colors.red
+                            : Colors.green,
+                      )
                     ),
                   )
                 ],
