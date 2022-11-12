@@ -40,7 +40,6 @@ jobs:
     # Get flutter dependencies.
     - run: flutter pub get
     
-    - run: flutter format --set-exit-if-changed .
     
     # Build apk.
     - run: flutter build apk --split-per-abi --release
