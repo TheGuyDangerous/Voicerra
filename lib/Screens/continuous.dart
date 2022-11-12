@@ -13,7 +13,7 @@ import 'package:permission_handler/permission_handler.dart';
 
 const serverUrl =
     'wss://api.deepgram.com/v1/listen?encoding=linear16&sample_rate=16000&language=en-GB';
-const apiKey = '8c828c526d7332a1978ee7f599ffc72ebfffca77';
+const apiKey = '// add api key';
 
 class ContinuousVoiceApp extends StatefulWidget {
   const ContinuousVoiceApp({Key? key}) : super(key: key);
