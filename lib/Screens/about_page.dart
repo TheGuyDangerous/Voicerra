@@ -92,6 +92,39 @@ class _AboutPageState extends State<AboutPage> {
                       subtitle: Text(_packageInfo.version),
                     ),
                   ),
+                  Column(
+                    children: [
+                      InkWell(
+                        borderRadius: BorderRadius.circular(15.0),
+                        onTap: () {},
+                        child: ListTile(
+                          leading: const CircleAvatar(
+                            backgroundColor: Color(0xffd1ffeb),
+                            foregroundColor: Color(0xff006a53),
+                            child: Icon(Iconsax.lock),
+                          ),
+                          title: Text(
+                            'App Lock',
+                            style: TextStyle(
+                              color: Theme.of(context).colorScheme.onBackground,
+                            ),
+                          ),
+                          subtitle: Text("Secure your notes"),
+                          trailing: Icon(Icons.keyboard_arrow_down),
+                        ),
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Text("Use Biometric", style: TextStyle(
+                              color: Theme.of(context).colorScheme.onBackground,
+                              fontSize: 11
+                          ),),
+                          Switch(onChanged: (value){}, value: false,)
+                        ],
+                      )
+                    ],
+                  ),
                   Padding(
                     padding: const EdgeInsets.all(10.0),
                     child: Padding(
