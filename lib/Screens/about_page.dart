@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:line_icons/line_icons.dart';
+import 'package:local_auth/local_auth.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 import 'package:voicerra/widget/customappbar.dart';
+
+import '../widget/app_lock_settings_option.dart';
 
 class AboutPage extends StatefulWidget {
   const AboutPage({super.key});
@@ -17,6 +21,10 @@ class _AboutPageState extends State<AboutPage> {
   String packageName = '';
   String version = '';
   String buildNumber = '';
+
+  final LocalAuthentication _auth = LocalAuthentication();
+
+  bool _canAuthenticateWithBiometrics = false;
 
   @override
   void initState() {
@@ -38,6 +46,7 @@ class _AboutPageState extends State<AboutPage> {
     packageName = packageInfo.packageName;
     version = packageInfo.version;
     buildNumber = packageInfo.buildNumber;
+    _canAuthenticateWithBiometrics = await _auth.canCheckBiometrics;
   }
 
   PackageInfo _packageInfo = PackageInfo(
@@ -92,39 +101,8 @@ class _AboutPageState extends State<AboutPage> {
                       subtitle: Text(_packageInfo.version),
                     ),
                   ),
-                  Column(
-                    children: [
-                      InkWell(
-                        borderRadius: BorderRadius.circular(15.0),
-                        onTap: () {},
-                        child: ListTile(
-                          leading: const CircleAvatar(
-                            backgroundColor: Color(0xffd1ffeb),
-                            foregroundColor: Color(0xff006a53),
-                            child: Icon(Iconsax.lock),
-                          ),
-                          title: Text(
-                            'App Lock',
-                            style: TextStyle(
-                              color: Theme.of(context).colorScheme.onBackground,
-                            ),
-                          ),
-                          subtitle: Text("Secure your notes"),
-                          trailing: Icon(Icons.keyboard_arrow_down),
-                        ),
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          Text("Use Biometric", style: TextStyle(
-                              color: Theme.of(context).colorScheme.onBackground,
-                              fontSize: 11
-                          ),),
-                          Switch(onChanged: (value){}, value: false,)
-                        ],
-                      )
-                    ],
-                  ),
+                  if (_canAuthenticateWithBiometrics)
+                  AppLockSettingsOption(auth: _auth),
                   Padding(
                     padding: const EdgeInsets.all(10.0),
                     child: Padding(
@@ -406,3 +384,4 @@ class _AboutPageState extends State<AboutPage> {
     print('hihi');
   }
 }
+
