@@ -88,6 +88,10 @@ flutter run
                       2. Bluetooth
                       3. Read/Write Storage
 
+## Update
+
+I have disabled the google cloud speech to text api json file, due to people reuploading and misusing the project without prior permission.
+will restart it later down the line
 
 Logic
 ---
